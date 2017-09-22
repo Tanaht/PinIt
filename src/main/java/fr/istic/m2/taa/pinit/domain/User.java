@@ -1,12 +1,10 @@
 package fr.istic.m2.taa.pinit.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class User {
@@ -21,7 +19,12 @@ public class User {
     @NotNull
     private String password;
 
-    private Set<Authority> authorities = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+    private List<Authority> authorities = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -47,11 +50,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<Authority> getAuthorities() {
+    public List<Authority> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
+    public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
 }

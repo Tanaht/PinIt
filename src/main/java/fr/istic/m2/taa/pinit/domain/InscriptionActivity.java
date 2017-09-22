@@ -12,7 +12,10 @@ public class InscriptionActivity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @OneToOne
     private User user;
+
+    @OneToOne
     private Activity activity;
 
     @Embedded

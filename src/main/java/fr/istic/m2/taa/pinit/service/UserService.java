@@ -5,7 +5,9 @@ import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.AuthorityRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -27,13 +29,14 @@ public class UserService {
     public User createUser(String login, String password) {
         User newUser = new User();
         Authority authority = authorityRepository.findOne(Authority.USER);
-        Set<Authority> authorities = new HashSet<>();
+
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(login);
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
 
 
+        List<Authority> authorities = new ArrayList<>();
         authorities.add(authority);
         newUser.setAuthorities(authorities);
 
