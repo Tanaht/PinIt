@@ -1,7 +1,7 @@
 {
-  "name": "jhipster",
+  "name": "pin-it-client",
   "version": "0.0.0",
-  "description": "Description for JHIPSTER",
+  "description": "PinIt Client",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [
@@ -90,8 +90,7 @@
   "scripts": {
     "lint": "tslint --type-check --project './tsconfig.json' -e 'node_modules/**'",
     "lint:fix": "yarn run lint -- --fix",
-    "ngc": "ngc -p tsconfig-aot.json",
-    "cleanup": "rimraf target/{aot,www}",
+    "cleanup": "rimraf target/{www}",
     "clean-www": "rimraf target//www/app/{src,target/}",
     "start": "yarn run webpack:dev",
     "serve": "yarn run start",
