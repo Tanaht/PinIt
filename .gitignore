@@ -22,3 +22,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+## Typescript and Javascript ##
+.node_modules/
