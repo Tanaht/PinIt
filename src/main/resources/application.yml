@@ -31,8 +31,14 @@ spring:
         console:
             enabled: true
 
+management:
+    security:
+        enable: true
+security:
+    basic:
+        enabled: true
+
 logging:
     level:
-        org:
-            hibernate:
-                SQL: 'debug'
+#        org.hibernate.SQL: 'debug'
+#        org.springframework.web: 'trace'
