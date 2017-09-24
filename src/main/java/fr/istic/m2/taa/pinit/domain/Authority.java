@@ -1,5 +1,7 @@
 package fr.istic.m2.taa.pinit.domain;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Authority {
+public class Authority implements GrantedAuthority {
 
     public static final String ADMIN = "ADMIN";
     public static final String USER = "USER";
@@ -17,21 +19,30 @@ public class Authority {
     @Size(min = 0, max = 50)
     @Id
     @Column(length = 50)
-    private String name;
+    private String authority;
 
     public Authority(){
 
     }
 
     public Authority(String name) {
-        this.name = name;
+        this.authority = name;
     }
 
     @Override
     public String toString() {
         return "Authority{" +
-                "name='" + name + '\'' +
+                "name='" + authority + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 
     @Override
@@ -41,11 +52,13 @@ public class Authority {
 
         Authority authority = (Authority) o;
 
-        return name != null ? name.equals(authority.name) : authority.name == null;
+        return authority != null ? authority.equals(authority.authority) : authority.authority == null;
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        return authority != null ? authority.hashCode() : 0;
     }
+
+
 }

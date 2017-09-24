@@ -3,11 +3,10 @@ package fr.istic.m2.taa.pinit.web.rest.model;
 public class Login {
 
     private String login;
-    private String passwordHashed;
+    private String password;
 
-    public Login(String login, String passwordHashed) {
-        this.login = login;
-        this.passwordHashed = passwordHashed;
+    public Login() {
+
     }
 
     public String getLogin() {
@@ -18,19 +17,19 @@ public class Login {
         this.login = login;
     }
 
-    public String getPasswordHashed() {
-        return passwordHashed;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHashed(String passwordHashed) {
-        this.passwordHashed = passwordHashed;
+    public void setPassword(String passwordHashed) {
+        this.password = passwordHashed;
     }
 
     @Override
     public String toString() {
         return "Login{" +
                 "login='" + login + '\'' +
-                ", passwordHashed='" + passwordHashed + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
