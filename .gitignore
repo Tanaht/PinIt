@@ -26,3 +26,5 @@ nbdist/
 ## Typescript and Javascript ##
 node_modules/
 node/
+
+yarn\.lock

@@ -16,4 +16,10 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         }
     }
 
+
+   /* @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        //TODO: It's just a glue for now.
+        registry.addMapping("/").allowedOrigins("http://localhost:9060");
+    }*/
 }

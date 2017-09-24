@@ -7,6 +7,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
@@ -19,6 +20,7 @@ import java.util.EnumSet;
 /**
  * Important Not Used for now but might be useful when times comes
  */
+@Component
 public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
 
 
