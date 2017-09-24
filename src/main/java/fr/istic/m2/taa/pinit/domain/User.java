@@ -23,7 +23,7 @@ public class User {
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority")})
     private List<Authority> authorities = new ArrayList<>();
 
     public long getId() {
