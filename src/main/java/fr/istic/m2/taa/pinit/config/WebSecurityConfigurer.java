@@ -1,6 +1,5 @@
 package fr.istic.m2.taa.pinit.config;
 
-import fr.istic.m2.taa.pinit.domain.Authority;
 import fr.istic.m2.taa.pinit.security.jwt.CustomBasicAuthenticationFilter;
 import fr.istic.m2.taa.pinit.security.jwt.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http
                 .authorizeRequests()
-                .antMatchers("/", "/api/login/connect", "/app/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/", "/app/**", "/login").permitAll()
+                .antMatchers("/api/**", "/logout").hasRole("USER").and().formLogin();
                 /*.and()
                 .formLogin()
                 .loginPage("/login")
@@ -48,11 +47,12 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
+        /*auth
                 .inMemoryAuthentication()
                 .withUser("user").password("user").roles(Authority.USER).
                 and()
-                .withUser("admin").password("admin").roles(Authority.ADMIN);    }
+                .withUser("admin").password("admin").roles(Authority.ADMIN); */
+    }
 
     @Bean
     @Override
