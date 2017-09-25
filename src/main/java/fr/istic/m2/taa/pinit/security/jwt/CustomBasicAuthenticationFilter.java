@@ -1,6 +1,6 @@
 package fr.istic.m2.taa.pinit.security.jwt;
 
-import fr.istic.m2.taa.pinit.config.SecurityConfig;
+import fr.istic.m2.taa.pinit.config.WebSecurityConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -21,7 +21,7 @@ public class CustomBasicAuthenticationFilter extends BasicAuthenticationFilter {
         //Generate Token
         //Save the token for the logged in user
         //send token in the response
-        response.setHeader(SecurityConfig.AUTHORIZATION_HEADER , "token");
+        response.setHeader(WebSecurityConfigurer.AUTHORIZATION_HEADER , "token");
 
 
     }

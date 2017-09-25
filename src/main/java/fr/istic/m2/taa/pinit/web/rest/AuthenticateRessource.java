@@ -1,7 +1,7 @@
 package fr.istic.m2.taa.pinit.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.istic.m2.taa.pinit.config.SecurityConfig;
+import fr.istic.m2.taa.pinit.config.WebSecurityConfigurer;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.web.rest.model.Login;
@@ -62,7 +62,7 @@ public class AuthenticateRessource {
                 //String jwt = tokenProvider.createToken(authentication);
                     String jwt = "tokenToujoursValide";
 
-                response.addHeader(SecurityConfig.AUTHORIZATION_HEADER, "Bearer " + jwt);
+                response.addHeader(WebSecurityConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
                 return ResponseEntity.ok(new JWTToken(jwt));
 
