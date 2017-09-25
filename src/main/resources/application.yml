@@ -33,10 +33,10 @@ spring:
 
 management:
     security:
-        enable: false
+        enable: true
 security:
     basic:
-        enabled: false
+        enabled: true
 
 logging:
     level:
