@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {LoginComponent} from './login/login.component';
 import {AuthenticationComponent} from './authentication.component';
-import {MdButtonModule, MdIconModule, MdMenuModule} from '@angular/material';
+import {MdButtonModule, MdCardModule, MdIconModule, MdMenuModule} from '@angular/material';
 import {RegisterComponent} from './register/register.component';
 import {AppRoutingModule} from '../app-routing.module';
 
@@ -16,6 +16,7 @@ import {AppRoutingModule} from '../app-routing.module';
         MdMenuModule,
         MdButtonModule,
         MdIconModule,
+        MdCardModule
     ],
     providers: [
     ],
