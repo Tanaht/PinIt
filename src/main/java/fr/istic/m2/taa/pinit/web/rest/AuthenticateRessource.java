@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.istic.m2.taa.pinit.config.WebSecurityConfigurer;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
+import fr.istic.m2.taa.pinit.security.jwt.JWTConfigurer;
 import fr.istic.m2.taa.pinit.security.jwt.TokenProvider;
 import fr.istic.m2.taa.pinit.service.AuthenticateService;
 import fr.istic.m2.taa.pinit.web.rest.model.Login;
@@ -41,7 +42,7 @@ public class AuthenticateRessource {
         this.tokenProvider = tokenProvider;
     }
 
-    @GetMapping("/login/connect")
+    @GetMapping("/authenticate/login")
     public ResponseEntity connectUser(@Valid Login login, HttpServletResponse response){
 
         //login exist ?
@@ -59,7 +60,7 @@ public class AuthenticateRessource {
             String jwt = tokenProvider.createToken(authentication);
             //String jwt = "tokenToujoursValide";
 
-            response.addHeader(WebSecurityConfigurer.AUTHORIZATION_HEADER, jwt);
+            response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, jwt);
             return ResponseEntity.ok(new JWTToken(jwt));
 
         }catch (BadCredentialsException e){
@@ -71,7 +72,7 @@ public class AuthenticateRessource {
                 "bad login or bad password"), HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/login/disconnect")
+    @GetMapping("/authenticate/logout")
     public boolean disconnectUser(@RequestBody String userLogin){
 
         return true;

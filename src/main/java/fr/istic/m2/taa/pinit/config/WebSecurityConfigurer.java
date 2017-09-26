@@ -19,7 +19,6 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    public static final String AUTHORIZATION_HEADER = "headerToken";
 
     private TokenProvider tokenProvider;
 
@@ -32,10 +31,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http
                 .authorizeRequests()
-                .antMatchers("/","/app/**","/login").permitAll()
-                .antMatchers("/api/**","/logout").hasRole("USER")
-                .and()
-                .formLogin();
+                .antMatchers("/","/app/**","/api/authenticate/login").permitAll()
+                .antMatchers("/api/**").hasRole("USER")
+                ;
 
         //Implementing Token based authentication in this filter
         final JWTFilter tokenFilter = new JWTFilter(tokenProvider);
