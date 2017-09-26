@@ -1,7 +1,7 @@
 package fr.istic.m2.taa.pinit.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.istic.m2.taa.pinit.config.SecurityConfig;
+import fr.istic.m2.taa.pinit.config.WebSecurityConfigurer;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.security.jwt.TokenProvider;
@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -60,7 +59,7 @@ public class AuthenticateRessource {
             String jwt = tokenProvider.createToken(authentication);
             //String jwt = "tokenToujoursValide";
 
-            response.addHeader(SecurityConfig.AUTHORIZATION_HEADER, jwt);
+            response.addHeader(WebSecurityConfigurer.AUTHORIZATION_HEADER, jwt);
             return ResponseEntity.ok(new JWTToken(jwt));
 
         }catch (BadCredentialsException e){

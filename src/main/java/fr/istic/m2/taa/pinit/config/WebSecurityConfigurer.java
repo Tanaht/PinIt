@@ -17,13 +17,13 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     public static final String AUTHORIZATION_HEADER = "headerToken";
 
     private TokenProvider tokenProvider;
 
-    public SecurityConfig(TokenProvider tokenProvider) {
+    public WebSecurityConfigurer(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
 
