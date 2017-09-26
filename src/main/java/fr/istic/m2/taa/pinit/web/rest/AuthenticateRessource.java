@@ -44,21 +44,14 @@ public class AuthenticateRessource {
 
     @GetMapping("/authenticate/login")
     public ResponseEntity connectUser(@Valid Login login, HttpServletResponse response){
-
-        //login exist ?
-        Optional<User> potentialUser = userRepository.findOneByLogin(login.getLogin().toLowerCase());
-
         UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(login.getLogin(), login.getPassword());
-
-
         try {
             Authentication authentication = this.authenticateService.authenticate(authenticationToken);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String jwt = tokenProvider.createToken(authentication);
-            //String jwt = "tokenToujoursValide";
 
             response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, jwt);
             return ResponseEntity.ok(new JWTToken(jwt));
