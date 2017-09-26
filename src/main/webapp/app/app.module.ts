@@ -5,11 +5,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-    MdButtonModule, MdCardModule, MdIconModule, MdIconRegistry, MdListModule, MdSidenavModule,
+    MdButtonModule, MdCardModule, MdIconModule, MdIconRegistry, MdListModule, MdMenuModule, MdSidenavModule,
     MdToolbarModule
 } from '@angular/material';
 
-// jhipster-needle-angular-add-module-import JHipster will add new module here
+import {AuthenticationModule} from './authentication/authentication.module';
+import {AppRoutingModule} from './app-routing.module';
 
 @NgModule({
     declarations: [
@@ -18,12 +19,17 @@ import {
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        AppRoutingModule,
+
         MdToolbarModule,
         MdCardModule,
         MdSidenavModule,
         MdButtonModule,
         MdIconModule,
-        MdListModule
+        MdListModule,
+        MdMenuModule,
+        MdButtonModule,
+        AuthenticationModule
     ],
     providers: [
         MdIconRegistry
