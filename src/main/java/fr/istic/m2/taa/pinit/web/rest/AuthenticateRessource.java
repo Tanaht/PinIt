@@ -4,18 +4,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.istic.m2.taa.pinit.config.WebSecurityConfigurer;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
+import fr.istic.m2.taa.pinit.security.jwt.JWTConfigurer;
+import fr.istic.m2.taa.pinit.security.jwt.TokenProvider;
+import fr.istic.m2.taa.pinit.service.AuthenticateService;
 import fr.istic.m2.taa.pinit.web.rest.model.Login;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -26,62 +30,42 @@ public class AuthenticateRessource {
 
     private final UserRepository userRepository;
 
+    private final AuthenticateService authenticateService;
 
+    private final TokenProvider tokenProvider;
 
-    private final AuthenticationManager authenticationManager;
-
-    public AuthenticateRessource(UserRepository userRepository, AuthenticationManager authenticationManager) {
+    public AuthenticateRessource(UserRepository userRepository, AuthenticateService authenticateService, TokenProvider tokenProvider) {
         this.userRepository = userRepository;
 
-        this.authenticationManager = authenticationManager;
+        this.authenticateService = authenticateService;
+
+        this.tokenProvider = tokenProvider;
     }
 
-    @GetMapping("/login/connect")
-    public ResponseEntity connectUser( Login login, HttpServletResponse response){
-
-        //login exist ?
-        Optional<User> potentialUser = userRepository.findOneByLogin(login.getLogin().toLowerCase());
-        //if (potentialUser.isPresent()) {
-        if (true) {
-            //User user = potentialUser.get();
-            if (true){
-            //if (login.getPassword().equals(user.getPassword())){
-                UsernamePasswordAuthenticationToken authenticationToken =
+    @PostMapping("/authenticate/login")
+    public ResponseEntity connectUser(@Valid @RequestBody Login login, HttpServletResponse response){
+        UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(login.getLogin(), login.getPassword());
+        try {
+            Authentication authentication = this.authenticateService.authenticate(authenticationToken);
 
-                log.info(authenticationToken.toString());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                try {
-                    Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+            String jwt = tokenProvider.createToken(authentication);
 
+            response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, jwt);
+            return ResponseEntity.ok(new JWTToken(jwt));
 
-
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                //String jwt = tokenProvider.createToken(authentication);
-                    String jwt = "tokenToujoursValide";
-
-                response.addHeader(WebSecurityConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-                return ResponseEntity.ok(new JWTToken(jwt));
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }else{//bad password
-                log.debug("bad password for login : {}", login);
-            }
-        }else{// bad login
-            log.debug("bad login for login : {}", login);
-
+        }catch (BadCredentialsException e){
+            log.debug("bad credential for login : {}", login);
         }
+
 
         return new ResponseEntity<>(Collections.singletonMap("AuthenticationException",
                 "bad login or bad password"), HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/login/disconnect")
+    @GetMapping("/authenticate/logout")
     public boolean disconnectUser(@RequestBody String userLogin){
 
         return true;

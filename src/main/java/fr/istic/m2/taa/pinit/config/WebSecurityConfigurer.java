@@ -1,12 +1,14 @@
 package fr.istic.m2.taa.pinit.config;
 
-import fr.istic.m2.taa.pinit.security.jwt.CustomBasicAuthenticationFilter;
-import fr.istic.m2.taa.pinit.security.jwt.TokenAuthenticationFilter;
+import fr.istic.m2.taa.pinit.security.jwt.JWTConfigurer;
+import fr.istic.m2.taa.pinit.security.jwt.JWTFilter;
+import fr.istic.m2.taa.pinit.security.jwt.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,30 +21,27 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-        public static final String AUTHORIZATION_HEADER = "headerToken";
+
+    private TokenProvider tokenProvider;
+
+    public WebSecurityConfigurer(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http
                 .authorizeRequests()
-                .antMatchers("/", "/app/**", "/login").permitAll()
-                .antMatchers("/api/**", "/logout").hasRole("USER").and().formLogin();
-                /*.and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
+                .antMatchers("/","/app/**","/api/authenticate/login").permitAll()
+                .antMatchers("/api/**").hasRole("USER")
                 .and()
-                .logout()
-                .permitAll();*/
-
+                .apply(securityConfigurerAdapter());
 
         //Implementing Token based authentication in this filter
-        final TokenAuthenticationFilter tokenFilter = new TokenAuthenticationFilter();
-        http.addFilterBefore(tokenFilter, BasicAuthenticationFilter.class);
+        //final JWTFilter tokenFilter = new JWTFilter(tokenProvider);
+        //http.addFilterBefore(tokenFilter, BasicAuthenticationFilter.class);
 
-        //Creating token when basic authentication is successful and the same token can be used to authenticate for further requests
-        final CustomBasicAuthenticationFilter customBasicAuthFilter = new CustomBasicAuthenticationFilter(this.authenticationManager() );
-        http.addFilter(customBasicAuthFilter);
     }
 
     @Autowired
@@ -51,15 +50,14 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .inMemoryAuthentication()
                 .withUser("user").password("user").roles(Authority.USER).
                 and()
-                .withUser("admin").password("admin").roles(Authority.ADMIN); */
+                .withUser("admin").password("admin").roles(Authority.ADMIN);
+                */
     }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -69,4 +67,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }
+
+
 }
