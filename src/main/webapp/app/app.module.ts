@@ -12,6 +12,9 @@ import {
 import {AuthenticationModule} from './authentication/authentication.module';
 import {AppRoutingModule} from './app-routing.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {RestService} from './rest/rest.service';
+import {LoggerService} from './logger/logger.service';
+import {HttpModule} from '@angular/http';
 
 @NgModule({
     declarations: [
@@ -22,6 +25,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
         BrowserAnimationsModule,
         AppRoutingModule,
 
+        HttpModule,
         MdToolbarModule,
         MdCardModule,
         MdSidenavModule,
@@ -36,7 +40,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
         AuthenticationModule,
     ],
     providers: [
-        MdIconRegistry
+        MdIconRegistry, RestService, LoggerService
     ],
     bootstrap: [AppComponent]
 })
