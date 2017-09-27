@@ -1,5 +1,6 @@
 package fr.istic.m2.taa.pinit.config;
 
+import fr.istic.m2.taa.pinit.security.jwt.JWTConfigurer;
 import fr.istic.m2.taa.pinit.security.jwt.JWTFilter;
 import fr.istic.m2.taa.pinit.security.jwt.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -33,11 +35,12 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/","/app/**","/api/authenticate/login").permitAll()
                 .antMatchers("/api/**").hasRole("USER")
-                ;
+                .and()
+                .apply(securityConfigurerAdapter());
 
         //Implementing Token based authentication in this filter
-        final JWTFilter tokenFilter = new JWTFilter(tokenProvider);
-        http.addFilterBefore(tokenFilter, BasicAuthenticationFilter.class);
+        //final JWTFilter tokenFilter = new JWTFilter(tokenProvider);
+        //http.addFilterBefore(tokenFilter, BasicAuthenticationFilter.class);
 
     }
 
@@ -52,7 +55,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
 
-
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -62,4 +67,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }
+
+
 }

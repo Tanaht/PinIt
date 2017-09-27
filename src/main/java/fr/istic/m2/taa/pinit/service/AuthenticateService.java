@@ -30,9 +30,6 @@ public class AuthenticateService {
 
         Optional<User> potentialUser = userRepository.findOneByLogin(username.toLowerCase());
 
-        log.debug("test : {}, {}",username, password);
-
-
         if (!potentialUser.isPresent()) {
             //bad login
             throw new BadCredentialsException("1000");
