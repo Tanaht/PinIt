@@ -1,7 +1,6 @@
 package fr.istic.m2.taa.pinit.security.jwt;
 
 import io.jsonwebtoken.*;
-import org.jcp.xml.dsig.internal.dom.DOMUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

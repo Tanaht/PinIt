@@ -8,6 +8,10 @@ import {
 import {RegisterComponent} from './register/register.component';
 import {AppRoutingModule} from '../app-routing.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {HttpModule} from '@angular/http';
+import {AuthenticationService} from './authentication.service';
+import {LoggerService} from '../logger/logger.service';
+import {RestService} from '../rest/rest.service';
 
 @NgModule({
     declarations: [
@@ -17,6 +21,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     ],
     imports: [
         AppRoutingModule,
+
+        HttpModule,
         MdMenuModule,
         MdButtonModule,
         MdIconModule,
@@ -27,6 +33,9 @@ import {FlexLayoutModule} from '@angular/flex-layout';
         FlexLayoutModule
     ],
     providers: [
+        LoggerService,
+        RestService,
+        AuthenticationService
     ],
     exports: [
         AuthenticationComponent,

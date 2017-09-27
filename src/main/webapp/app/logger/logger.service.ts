@@ -4,29 +4,29 @@ import { environment } from '../../../../../environments/environment';
 @Injectable()
 export class LoggerService {
 
-  public info(what: string, message: string):void {
+  public info(what: string, ...messages: string[]):void {
       if(!isDevMode())
           return;
 
-      console.info("[" + what + "]:" + message);
+      console.info("[" + what + "]", messages);
   }
 
-  public error(what: string, message: string): void{
-      console.error("[" + what + "]:" + message);
+  public error(what: string, ...messages: string[]): void{
+      console.error("[" + what + "]", messages);
   }
 
-  public warn(what: string, message: string):void {
+  public warn(what: string, ...messages: string[]):void {
       if(!isDevMode())
           return;
 
-      console.warn("[" + what + "]:" + message);
+      console.warn("[" + what + "]", messages);
   }
 
-  public debug(what: string, message: string):void {
+  public debug(what: string, ...messages: string[]):void {
       if(!environment.debug)
         return;
 
-      console.debug("[" + what + "]:" + message);
+      console.debug("[" + what + "]", messages);
   }
 
 }
