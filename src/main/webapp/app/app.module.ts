@@ -11,6 +11,7 @@ import {
 
 import {AuthenticationModule} from './authentication/authentication.module';
 import {AppRoutingModule} from './app-routing.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,10 @@ import {AppRoutingModule} from './app-routing.module';
         MdListModule,
         MdMenuModule,
         MdButtonModule,
-        AuthenticationModule
+
+        FlexLayoutModule,
+
+        AuthenticationModule,
     ],
     providers: [
         MdIconRegistry

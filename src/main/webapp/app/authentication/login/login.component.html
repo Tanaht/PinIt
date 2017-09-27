@@ -1,4 +1,4 @@
-<md-card class="mat-card" color="primary">
+<md-card class="mat-card" color="primary" fxFlex="0 1 auto">
     <md-card-title class="mat-card-title">
         Connexion
     </md-card-title>
@@ -6,6 +6,17 @@
         Veuillez-vous connecter
     </md-card-subtitle>
     <md-card-content>
-
+        <form class="login-form" fxLayout="column">
+            <md-form-field>
+                <input mdInput type="text" placeholder="Username">
+            </md-form-field>
+            <md-form-field>
+                <input mdInput type="password" placeholder="Password">
+            </md-form-field>
+        </form>
     </md-card-content>
+    <md-card-actions fxLayout="row" fxLayoutALign="start stretch" fxLayoutWrap>
+        <span fxFlex="1 1 auto"></span>
+        <button md-raised-button color="accent">Connexion</button>
+    </md-card-actions>
 </md-card>
