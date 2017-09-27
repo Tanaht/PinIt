@@ -42,8 +42,8 @@ public class AuthenticateRessource {
         this.tokenProvider = tokenProvider;
     }
 
-    @GetMapping("/authenticate/login")
-    public ResponseEntity connectUser(@Valid Login login, HttpServletResponse response){
+    @PostMapping("/authenticate/login")
+    public ResponseEntity connectUser(@Valid @RequestBody Login login, HttpServletResponse response){
         UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(login.getLogin(), login.getPassword());
         try {
