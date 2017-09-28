@@ -1,12 +1,17 @@
 package fr.istic.m2.taa.pinit.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Activity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String nameActivity;
 
     //température min max en celsius
@@ -99,5 +104,13 @@ public class Activity {
 
     public void setSnowMax(double snowMax) {
         this.snowMax = snowMax;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
