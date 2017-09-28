@@ -1,14 +1,18 @@
 <md-toolbar color="primary">
     <span>PinIt App</span>
+    <span fxFlex="1 1 auto"></span>
+    <authentication></authentication>
 </md-toolbar>
 <md-sidenav-container>
     <md-sidenav class="mat-elevation-z24" mode="side" opened="true" #sidenav>
       <md-nav-list>
-        <md-list-item>
-          <md-icon>home</md-icon>
-
-          <a href="#" class="pi-nav-link">Accueil</a>
-        </md-list-item>
+          <md-list-item routerLink="/">
+              <md-icon>home</md-icon>
+              <span class="pi-nav-link">Accueil</span>
+          </md-list-item>
       </md-nav-list>
     </md-sidenav>
+    <div class="pi-content"  fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutAlign="center stretch">
+        <router-outlet></router-outlet>
+    </div>
 </md-sidenav-container>

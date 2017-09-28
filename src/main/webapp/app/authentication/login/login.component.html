@@ -1,0 +1,22 @@
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="authenticate()" novalidate>
+    <md-card class="mat-card" fxFlex="0 1 auto">
+        <md-card-title class="mat-card-title">
+            Connexion
+        </md-card-title>
+        <md-card-subtitle class="mat-card-subtitle">
+            Veuillez-vous connecter !
+        </md-card-subtitle>
+        <md-card-content  fxLayout="column">
+            <md-form-field>
+                <input mdInput type="text" placeholder="Username" formControlName="username">
+            </md-form-field>
+            <md-form-field>
+                <input mdInput type="password" placeholder="Password" formControlName="password">
+            </md-form-field>
+        </md-card-content>
+        <md-card-actions fxLayout="row" fxLayoutALign="start stretch" fxLayoutWrap>
+            <span fxFlex="1 1 auto"></span>
+            <button type="submit" md-raised-button color="accent" [disabled]="loginForm.invalid">Connexion</button>
+        </md-card-actions>
+    </md-card>
+</form>

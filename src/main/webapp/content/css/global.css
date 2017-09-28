@@ -12,6 +12,11 @@ md-sidenav {
     width: 200px;
 }
 
-span.flex-space {
+span.pi-flex-space {
     flex: 1 1 auto;
+}
+
+snack-bar-container.pi-snackbar-warn {
+    background: #f44336;
+    color: #fff;
 }
