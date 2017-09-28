@@ -7,8 +7,4 @@ import {LoggerService} from './logger/logger.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-
-  constructor(rest: RestService, logger: LoggerService) {
-  }
-}
+export class AppComponent {}
