@@ -20,6 +20,7 @@ import {CommonModule} from '@angular/common';
 
 @NgModule({
     declarations: [
+        AppComponent
     ],
     imports: [
         BrowserModule,
