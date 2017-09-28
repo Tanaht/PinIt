@@ -19,6 +19,10 @@ public class User {
     @NotNull
     private String password;
 
+    @NotNull
+    private String email;
+
+
     @ManyToMany
     @JoinTable(
             name = "user_authority",
@@ -56,5 +60,13 @@ public class User {
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
