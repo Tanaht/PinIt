@@ -15,16 +15,19 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {RestService} from './rest/rest.service';
 import {LoggerService} from './logger/logger.service';
 import {HttpModule} from '@angular/http';
+import {ReactiveFormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
     declarations: [
-        AppComponent
     ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
 
+        CommonModule,
+        ReactiveFormsModule,
         HttpModule,
         MdToolbarModule,
         MdCardModule,

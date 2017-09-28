@@ -3,7 +3,7 @@ import {LoginComponent} from './login/login.component';
 import {AuthenticationComponent} from './authentication.component';
 import {
     MdButtonModule, MdCardModule, MdFormFieldModule, MdIconModule, MdInputModule,
-    MdMenuModule
+    MdMenuModule, MdSnackBarModule, MatSnackBarModule
 } from '@angular/material';
 import {RegisterComponent} from './register/register.component';
 import {AppRoutingModule} from '../app-routing.module';
@@ -12,6 +12,8 @@ import {HttpModule} from '@angular/http';
 import {AuthenticationService} from './authentication.service';
 import {LoggerService} from '../logger/logger.service';
 import {RestService} from '../rest/rest.service';
+import {ReactiveFormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -22,6 +24,8 @@ import {RestService} from '../rest/rest.service';
     imports: [
         AppRoutingModule,
 
+        CommonModule,
+        ReactiveFormsModule,
         HttpModule,
         MdMenuModule,
         MdButtonModule,
@@ -29,13 +33,14 @@ import {RestService} from '../rest/rest.service';
         MdCardModule,
         MdInputModule,
         MdFormFieldModule,
-
+        MdSnackBarModule,
+        MatSnackBarModule,
         FlexLayoutModule
     ],
     providers: [
         LoggerService,
         RestService,
-        AuthenticationService
+        AuthenticationService,
     ],
     exports: [
         AuthenticationComponent,
