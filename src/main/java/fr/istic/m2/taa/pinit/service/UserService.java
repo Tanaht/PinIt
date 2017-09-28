@@ -3,6 +3,7 @@ package fr.istic.m2.taa.pinit.service;
 import fr.istic.m2.taa.pinit.domain.Authority;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.AuthorityRepository;
+import fr.istic.m2.taa.pinit.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -23,26 +24,31 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    private final UserRepository userRepository;
+
+    public UserService(PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.userRepository = userRepository;
     }
 
-    public User createUser(String login, String password) {
+    public User createUser(User user) {
         User newUser = new User();
         Authority authority = authorityRepository.findOne(Authority.USER);
 
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(login);
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        newUser.setLogin(user.getLogin());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
 
 
         List<Authority> authorities = new ArrayList<>();
+        authorities.add(new Authority(Authority.USER));
+
         authorities.add(authority);
         newUser.setAuthorities(authorities);
 
-
+        userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }

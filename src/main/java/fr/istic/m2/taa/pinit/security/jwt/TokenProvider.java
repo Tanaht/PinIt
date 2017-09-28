@@ -1,7 +1,6 @@
 package fr.istic.m2.taa.pinit.security.jwt;
 
 import io.jsonwebtoken.*;
-import org.jcp.xml.dsig.internal.dom.DOMUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +34,7 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
-        this.secretKey = "aChanger"+ Math.random();
+        this.secretKey = "aChanger";
 
         this.tokenValidityInMilliseconds = 3600*1000;
     }
@@ -50,12 +49,14 @@ public class TokenProvider {
 
         validity = new Date(now + this.tokenValidityInMilliseconds);
 
-        return Jwts.builder()
-            .setSubject(authentication.getName())
-            .claim(AUTHORITIES_KEY, authorities)
-            .signWith(SignatureAlgorithm.HS512, secretKey)
-            .setExpiration(validity)
-            .compact();
+        String token = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .setExpiration(validity)
+                .compact();
+
+        return token;
     }
 
     public Authentication getAuthentication(String token) {
@@ -75,6 +76,7 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String authToken) {
+
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
             return true;
