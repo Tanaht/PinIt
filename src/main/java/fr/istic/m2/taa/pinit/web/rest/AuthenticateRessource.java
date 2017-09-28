@@ -1,8 +1,6 @@
 package fr.istic.m2.taa.pinit.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.istic.m2.taa.pinit.config.WebSecurityConfigurer;
-import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.security.jwt.JWTConfigurer;
 import fr.istic.m2.taa.pinit.security.jwt.TokenProvider;
@@ -18,14 +16,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Collections;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class AuthenticateRessource {
+public class AuthenticateRessource{
     private final Logger log = LoggerFactory.getLogger(AuthenticateRessource.class);
 
     private final UserRepository userRepository;
@@ -42,8 +40,8 @@ public class AuthenticateRessource {
         this.tokenProvider = tokenProvider;
     }
 
-    @PostMapping("/authenticate/login")
-    public ResponseEntity connectUser(@Valid @RequestBody Login login, HttpServletResponse response){
+    @GetMapping("/authenticate/login")
+    public ResponseEntity connectUser(@Valid Login login, HttpServletResponse response){
         UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(login.getLogin(), login.getPassword());
         try {
@@ -72,24 +70,25 @@ public class AuthenticateRessource {
     }
 
 
+
     /**
      * Object to return as body in JWT Authentication.
      */
     static class JWTToken {
 
-        private String idToken;
+        private String token;
 
-        JWTToken(String idToken) {
-            this.idToken = idToken;
+        JWTToken(String token) {
+            this.token = token;
         }
 
-        @JsonProperty("id_token")
-        String getIdToken() {
-            return idToken;
+        @JsonProperty("token")
+        String getToken() {
+            return token;
         }
 
-        void setIdToken(String idToken) {
-            this.idToken = idToken;
+        void setToken(String token) {
+            this.token = token;
         }
     }
 }

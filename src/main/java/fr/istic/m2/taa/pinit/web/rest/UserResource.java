@@ -3,6 +3,7 @@ package fr.istic.m2.taa.pinit.web.rest;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.service.UserService;
+import fr.istic.m2.taa.pinit.web.rest.model.Login;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -35,22 +36,10 @@ public class UserResource {
         log.debug("REST request to save User : {}", newUser);
 
         if (userRepository.findOneByLogin(newUser.getLogin().toLowerCase()).isPresent()) {
-
-            /*
-            return ResponseEntity.badRequest()
-                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "userexists", "Login already in use"))
-                    .body(null);
-                    */
-
-            return "";
+            return "user already exist";
         } else {
-            /*
-            User newUser = userService.createUser(managedUserVM);
-            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                    .headers(HeaderUtil.createAlert( "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
-                    .body(newUser);
-                    */
-            return "";
+            userService.createUser(newUser);
+            return "user created";
         }
     }
 }
