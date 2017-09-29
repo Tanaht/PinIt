@@ -1,8 +1,8 @@
 package fr.istic.m2.taa.pinit.config;
 
 
-import fr.istic.m2.taa.pinit.security.jwt.JWTConfigurer;
-import fr.istic.m2.taa.pinit.security.jwt.TokenProvider;
+import fr.istic.m2.taa.pinit.config.security.JWTConfigurer;
+import fr.istic.m2.taa.pinit.config.security.TokenProvider;
 import fr.istic.m2.taa.pinit.service.AuthenticateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,10 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 
@@ -36,8 +35,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/","/app/**","/api/authenticate/login","/api/users","/api/**","/api/*").permitAll()
-
-
                 .and()
                 .apply(securityConfigurerAdapter());
 
@@ -60,19 +57,17 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         */
     }
 
-
-    private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
-    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    /*@Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
+    }*/
+    
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
     }
-
-
 }

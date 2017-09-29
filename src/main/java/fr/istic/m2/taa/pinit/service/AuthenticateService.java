@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service used to authenticate a user according to its credentials (username, password)
+ */
 @Service
 public class AuthenticateService implements AuthenticationProvider {
 
@@ -25,20 +28,25 @@ public class AuthenticateService implements AuthenticationProvider {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Authenticate a user and return an authentication object.
+     * @param authentication
+     * @return Authentication
+     * @throws AuthenticationException
+     */
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getPrincipal() + "";
         String password = authentication.getCredentials() + "";
+        log.debug("Try to authenticate user with credentials: [{}, {}]", username, password);
 
         Optional<User> potentialUser = userRepository.findOneByLogin(username.toLowerCase());
 
         if (!potentialUser.isPresent()) {
-            //bad login
-            throw new BadCredentialsException("1000");
+            throw new BadCredentialsException("User not found in database");
         }
 
         if (!potentialUser.get().getPassword().equals(password)){
-            //bad password
-            throw new BadCredentialsException("1000");
+            throw new BadCredentialsException("Failed to login, incorrect password");
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, potentialUser.get().getAuthorities());
@@ -47,7 +55,6 @@ public class AuthenticateService implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(
-                UsernamePasswordAuthenticationToken.class);
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
