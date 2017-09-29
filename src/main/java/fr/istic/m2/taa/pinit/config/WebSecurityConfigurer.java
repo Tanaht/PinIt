@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 
@@ -34,13 +34,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/","/app/**","/api/authenticate/login","/api/users","/api/**","/api/*").permitAll()
+                .antMatchers("/","/app/**","/api/authenticate/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .apply(securityConfigurerAdapter());
-
-        //Implementing Token based authentication in this filter
-        //final JWTFilter tokenFilter = new JWTFilter(tokenProvider);
-        //http.addFilterBefore(tokenFilter, BasicAuthenticationFilter.class);
 
     }
 
@@ -66,7 +63,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }*/
-    
+
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
     }

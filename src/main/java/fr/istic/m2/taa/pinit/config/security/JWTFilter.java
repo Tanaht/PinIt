@@ -44,18 +44,19 @@ public class JWTFilter extends GenericFilterBean {
         if ("OPTIONS".equals(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
 
+            log.debug("HTTP OPTIONS Preflight allowed by default");
             chain.doFilter(servletRequest, servletResponse);
         }
         else if (StringUtils.hasText(token) && this.tokenProvider.validateToken(token)) {
             Authentication authentication = this.tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
 
-        log.info("Security token checker for {}", request.getRequestURI());
-        log.debug("Token used: " + token);
+            log.debug("Security token checker for {}, token: {}", request.getRequestURI(), token);
+        }
 
         chain.doFilter(servletRequest, servletResponse);
 
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 
 }

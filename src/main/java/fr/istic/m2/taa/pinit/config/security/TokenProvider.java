@@ -86,7 +86,6 @@ public class TokenProvider {
 
         User principal = new User(claims.getSubject(), "", authorities);
 
-        log.debug("User {} successfully retrieved", principal);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
