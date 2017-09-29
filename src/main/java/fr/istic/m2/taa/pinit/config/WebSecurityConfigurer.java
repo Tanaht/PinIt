@@ -18,13 +18,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-
     private TokenProvider tokenProvider;
 
     private AuthenticateService authenticateService;
 
-    public WebSecurityConfigurer(TokenProvider tokenProvider, AuthenticateService authenticateService) {
+    public WebSecurityConfigurer(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
+    }
+
+    @Autowired
+    public void setAuthenticateService(AuthenticateService authenticateService) {
         this.authenticateService = authenticateService;
     }
 
@@ -42,27 +45,12 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.authenticationProvider(authenticateService);
-        /*
-        auth
-                .inMemoryAuthentication()
-                .withUser("user").password("user").roles(Authority.USER).
-                and()
-                .withUser("admin").password("admin").roles(Authority.ADMIN);
-        */
-    }
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception { auth.authenticationProvider(authenticateService); }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(11);
     }
-
-    /*@Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
-    }*/
 
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
