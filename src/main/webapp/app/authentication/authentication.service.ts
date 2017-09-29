@@ -33,4 +33,8 @@ export class AuthenticationService {
             }
         );
     }
+
+    public register(username: string, password: string, email: string){
+        this.logger.debug('AuthenticationService register', username, password, email);
+    }
 }
