@@ -44,7 +44,10 @@ security:
 logging:
     level:
         org.springframework.security: 'debug'
+<<<<<<< Updated upstream
         fr.istic.m2.taa.pinit: 'debug'
 
+=======
+>>>>>>> Stashed changes
 #        org.hibernate.SQL: 'debug'
 #        org.springframework.web: 'trace'

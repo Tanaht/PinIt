@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity(debug = true)
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 
@@ -35,7 +35,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/","/app/**","/api/authenticate/login","/api/users","/api/**","/api/*").permitAll()
+                .antMatchers("/","/app/**","/api/authenticate/login","/api/users").permitAll()
 
 
                 .and()
