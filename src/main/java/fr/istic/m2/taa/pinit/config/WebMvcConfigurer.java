@@ -2,6 +2,7 @@ package fr.istic.m2.taa.pinit.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -17,9 +18,9 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     }
 
 
-   /* @Override
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         //TODO: It's just a glue for now.
         registry.addMapping("/").allowedOrigins("http://localhost:9060");
-    }*/
+    }
 }

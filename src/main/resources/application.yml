@@ -43,8 +43,8 @@ security:
 
 logging:
     level:
-        org.springframework.security: 'debug'
+#        org.springframework.security: 'debug'
         fr.istic.m2.taa.pinit: 'debug'
-
+        fr.istic.m2.taa.pinit.config: 'info'
 #        org.hibernate.SQL: 'debug'
 #        org.springframework.web: 'trace'

@@ -1,4 +1,4 @@
-package fr.istic.m2.taa.pinit.security.jwt;
+package fr.istic.m2.taa.pinit.config.security;
 
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
 
-    private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
+    private Logger log;
 
-    private static final String AUTHORITIES_KEY = "auth";
+    private final String AUTHORITIES_KEY = "auth";
 
     private String secretKey;
 
@@ -30,16 +30,24 @@ public class TokenProvider {
 
 
     public TokenProvider(){
+        this.log = LoggerFactory.getLogger(TokenProvider.class);
     }
 
     @PostConstruct
     public void init() {
         this.secretKey = "aChanger";
-
-        this.tokenValidityInMilliseconds = 3600*1000;
+        this.tokenValidityInMilliseconds = 3600000;
     }
 
-    public String createToken(Authentication authentication) {
+
+    /**
+     * Generate a token based on username and password send to server.
+     * @param authentication
+     * @return
+     */
+    public String generateToken(Authentication authentication) {
+        log.debug("Generate token for user: {}", authentication.getPrincipal());
+
         String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
@@ -59,7 +67,13 @@ public class TokenProvider {
         return token;
     }
 
+    /**
+     * Return an object representing the user credentials and its data (username, password)
+     * @param token
+     * @return Authentication
+     */
     public Authentication getAuthentication(String token) {
+        log.debug("Try to get user based on token: {}", token);
         Claims claims = Jwts.parser()
             .setSigningKey(secretKey)
             .parseClaimsJws(token)
@@ -75,10 +89,15 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public boolean validateToken(String authToken) {
+    /**
+     * Return whether or not a token is valid.
+     * @param token
+     * @return boolean
+     */
+    public boolean validateToken(String token) {
 
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
             log.info("Invalid JWT signature.");

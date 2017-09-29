@@ -1,4 +1,4 @@
-package fr.istic.m2.taa.pinit.security;
+package fr.istic.m2.taa.pinit.config.security;
 
 import fr.istic.m2.taa.pinit.domain.Authority;
 import org.springframework.security.core.Authentication;
