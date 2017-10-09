@@ -15,15 +15,15 @@ export class RestService {
       this.logger.debug("RestService", "Success request")
     }
 
-    public onError(data:object): void {
+    public onError(data: object): void {
       this.logger.error("RestService", "Error request");
       console.info(data);
     }
 
-    public create(uri: string, data: object): Observable<object> {
+    public create(uri: string, datas: object): Observable<object> {
         return new Observable<object>((observer: Subscriber<object>) => {
 
-            this.http.post(uri, data).subscribe((data) => {
+            this.http.post(uri, datas).subscribe((data) => {
                     this.onSuccess(data);
                     observer.next(data);
                 },
@@ -34,7 +34,7 @@ export class RestService {
         });
     }
 
-    public retrieve(uri: string, token:string): Observable<object> {
+    public retrieve(uri: string, token: string): Observable<object> {
       return new Observable<object>((observer: Subscriber<object>) => {
 
           this.http.get(uri, {headers: this.headers}).subscribe((data) => {
@@ -48,10 +48,10 @@ export class RestService {
       });
     }
 
-    public update(uri: string, data: object): Observable<object> {
+    public update(uri: string, datas: object): Observable<object> {
       return new Observable<object>((observer: Subscriber<object>) => {
 
-          this.http.put(uri, data).subscribe((data) => {
+          this.http.put(uri, datas).subscribe((data) => {
                   this.onSuccess(data);
                   observer.next(data);
               },
@@ -61,8 +61,6 @@ export class RestService {
               });
       });
     }
-
-
 
     public delete(uri: string): Observable<object> {
         return new Observable<object>((observer: Subscriber<object>) => {
@@ -77,7 +75,6 @@ export class RestService {
                 });
         });
     }
-
 
     public get(url: string, options?: RequestOptionsArgs): Observable<Response> {
         return this.http.get(url, options);

@@ -12,7 +12,7 @@ export class AuthenticationService {
 
     public authenticate(username: string, password: string): void {
         this.logger.debug('AuthenticationService', username, password);
-        let config = new MdSnackBarConfig();
+        const config = new MdSnackBarConfig();
         config.verticalPosition = 'bottom';
         config.horizontalPosition = 'right';
         config.duration = 2000;
@@ -34,7 +34,7 @@ export class AuthenticationService {
         );
     }
 
-    public register(username: string, password: string, email: string){
+    public register(username: string, password: string, email: string) {
         this.logger.debug('AuthenticationService register', username, password, email);
     }
 }
