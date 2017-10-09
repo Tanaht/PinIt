@@ -17,10 +17,12 @@ import {LoggerService} from './logger/logger.service';
 import {HttpModule} from '@angular/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        MapComponent
     ],
     imports: [
         BrowserModule,

@@ -3,15 +3,19 @@
 </button>
 <md-menu #menu="mdMenu">
     <button md-menu-item routerLink="login">
-        <md-icon>dialpad</md-icon>
+        <md-icon fontSet="fa" fontIcon="fa-sign-out"></md-icon>
+        <span>Déconnexion</span>
+    </button>
+    <button md-menu-item routerLink="login">
+        <md-icon fontSet="fa" fontIcon="fa-sign-in"></md-icon>
         <span>Connexion</span>
     </button>
     <button md-menu-item routerLink="register">
-        <md-icon>dialpad</md-icon>
+        <md-icon fontSet="fa" fontIcon="fa-user-plus"></md-icon>
         <span>Inscription</span>
     </button>
     <button md-menu-item>
-        <md-icon>dial</md-icon>
+        <md-icon>settings</md-icon>
         <span>Paramètres</span>
     </button>
 </md-menu>
