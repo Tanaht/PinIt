@@ -4,6 +4,7 @@ import fr.istic.m2.taa.pinit.domain.Authority;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.AuthorityRepository;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
+import fr.istic.m2.taa.pinit.web.rest.model.UserRegister;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
+    public User createUser(UserRegister user) {
         User newUser = new User();
         Authority authority = authorityRepository.findOne(Authority.USER);
 
@@ -40,6 +41,8 @@ public class UserService {
         newUser.setLogin(user.getLogin());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
+
+        newUser.setEmail(user.getEmail());
 
 
         List<Authority> authorities = new ArrayList<>();

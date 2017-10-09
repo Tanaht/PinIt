@@ -23,23 +23,15 @@ export class RegisterComponent {
             password: ['', Validators.required],
             passwordConfirm: ['', Validators.required],
             email: ['', Validators.email]
-        }, { validator: this.checkPasswords });
+        },{validator: this.checkPasswordsConfirm});
     }
 
     register(): void {
         this.auth.register( this.loginForm.get("username").value, this.loginForm.get("password").value, this.loginForm.get("email").value);
     }
 
-    checkPasswords(group: FormGroup) {
-        const pass = group.controls.password.value;
-        const confirmPass = group.controls.passwordConfirm.value;
-
-        if (pass === confirmPass) {
-            // group.controls.passwordConfirm.setErrors({'incorrect': false});
-            return null;
-        }else {
-            // group.controls.passwordConfirm.setErrors({'incorrect': true});
-            return true;
-        }
+    checkPasswordsConfirm(group: FormGroup) {
+        return group.get('password').value === group.get('passwordConfirm').value
+            ? null : {'mismatch': true};
     }
 }
