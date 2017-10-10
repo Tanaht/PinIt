@@ -61,7 +61,7 @@ public class InscriptionActivityResource {
 
     @PostMapping("/inscriptions")
     //@Secured("ROLE_USER")
-    public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId {
+    public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId {
         Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
 
         if (!potentialUser.isPresent()){
@@ -72,18 +72,15 @@ public class InscriptionActivityResource {
         Optional<Activity> potentialActivity = activityRepository.findById(ins.getActivityId());
 
         if (!potentialActivity.isPresent()){
-            //throw new BadUserId(ins.getLogin());
+            throw new BadActivityId(ins.getActivityId());
         }
 
         InscriptionActivity inscriptionActivity = new InscriptionActivity();
-
         inscriptionActivity.setUser(potentialUser.get());
-
         inscriptionActivity.setActivity(potentialActivity.get());
         inscriptionActivity.setLocalisation(ins.getCoordonne());
 
         inscriptionActivityRepository.save(inscriptionActivity);
-
 
         return ResponseEntity.ok().build();
     }

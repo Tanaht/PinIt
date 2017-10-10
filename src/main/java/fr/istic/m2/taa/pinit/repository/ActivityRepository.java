@@ -22,4 +22,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     Optional<Activity> findById(long activityUser);
 
+    List<Activity> findAll();
+
+
 }

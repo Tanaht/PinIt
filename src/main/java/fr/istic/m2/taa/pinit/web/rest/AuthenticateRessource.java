@@ -3,6 +3,7 @@ package fr.istic.m2.taa.pinit.web.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.istic.m2.taa.pinit.config.security.JWTConfigurer;
 import fr.istic.m2.taa.pinit.config.security.TokenProvider;
+import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.service.AuthenticateService;
 import fr.istic.m2.taa.pinit.web.rest.model.Login;
@@ -37,7 +38,7 @@ public class AuthenticateRessource{
     }
 
     @PostMapping("/authenticate/login")
-    public ResponseEntity connectUser(@Valid @RequestBody Login login, HttpServletResponse response){
+    public User connectUser(@Valid @RequestBody Login login, HttpServletResponse response){
         UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(login.getLogin(), login.getPassword());
 
@@ -52,7 +53,7 @@ public class AuthenticateRessource{
 
         response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, token);
         log.debug("Header filled with token");
-        return ResponseEntity.ok(new JWTToken(token));
+        return userRepository.findOneByLogin(login.getLogin()).get();
     }
 
     @GetMapping("/authenticate/logout")

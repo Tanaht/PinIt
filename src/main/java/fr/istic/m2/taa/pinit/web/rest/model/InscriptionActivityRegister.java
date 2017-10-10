@@ -34,12 +34,4 @@ public class InscriptionActivityRegister {
         this.coordonne = coordonne;
     }
 
-    @Override
-    public String toString() {
-        return "InscriptionActivityRegister{" +
-                "userId=" + userId +
-                ", activityId=" + activityId +
-                ", coordonne=" + coordonne +
-                '}';
-    }
 }
