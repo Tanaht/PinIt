@@ -40,7 +40,7 @@ import {CommonModule} from '@angular/common';
     providers: [
         LoggerService,
         RestService,
-        AuthenticationService,
+        AuthenticationService
     ],
     exports: [
         AuthenticationComponent,

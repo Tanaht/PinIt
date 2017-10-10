@@ -18,6 +18,7 @@ import {HttpModule} from '@angular/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import { MapComponent } from './map/map.component';
+import {AuthenticationService} from './authentication/authentication.service';
 
 @NgModule({
     declarations: [

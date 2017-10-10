@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {AuthenticationService} from '../authentication.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoggerService} from '../../logger/logger.service';
-import {User} from '../user';
+import {User} from '../../model/user';
 
 @Component({
     selector: 'login',
@@ -10,11 +10,9 @@ import {User} from '../user';
     styles: ['md-card { margin-top: 40px; }']
 })
 export class LoginComponent {
-    private authenticated: User;
     public loginForm: FormGroup;
 
     constructor(private auth: AuthenticationService, private fb: FormBuilder, private logger: LoggerService) {
-        this.authenticated = new User();
         this.createForm();
     }
 
