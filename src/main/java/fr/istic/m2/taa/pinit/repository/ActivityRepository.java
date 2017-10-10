@@ -18,6 +18,6 @@ import java.util.Optional;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    Optional<Activity> findOneByNameActivity(String nameActivity);
+    Optional<Activity> findByNameActivity(String nameActivity);
 
 }

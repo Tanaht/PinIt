@@ -21,10 +21,6 @@ public class InscriptionActivity {
     @Embedded
     private CoordGps localisation;
 
-
-    private Date dateDebut;
-    private Date dateFin;
-
     public InscriptionActivity(){
 
     }

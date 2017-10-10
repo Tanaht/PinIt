@@ -19,6 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByLogin(String login);
 
+    //jhipster method
     @EntityGraph(attributePaths = "authorities")
     User findOneWithAuthoritiesById(Long id);
 

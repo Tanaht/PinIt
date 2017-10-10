@@ -1,5 +1,7 @@
 package fr.istic.m2.taa.pinit.domain;
 
+import fr.istic.m2.taa.pinit.domain.meteo.CoordGps;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -69,4 +71,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
