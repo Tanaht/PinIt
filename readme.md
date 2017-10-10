@@ -1,6 +1,24 @@
 Pin It Application
 -
 
+### Informations utiles:
+
+#### Tutoriels:
+
+Google MAP API Documentations: https://angular-maps.com/
+
+Angular 4: https://angular.io/
+
+Angular Material: https://material.angular.io/
+
+Flex Layout: https://github.com/angular/flex-layout/wiki/API-Documentation
+
+#### Informations:
+GOOGLE MAP API KEY: AIzaSyCQaM6Mw4t5EbZVhbab3mBuWWROC_pcNT0
+
+ISTIC COORDINATE: 48.115464, -1.638707
+
+
 ###Données de développements:
 
 Durant le développement un script SQL est utilisé pour hydrater la base de données au démarrage de Spring.

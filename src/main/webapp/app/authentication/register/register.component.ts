@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import {User} from '../../model/user';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../authentication.service';
 import {LoggerService} from '../../logger/logger.service';
 
 @Component({
     selector: 'register',
-    templateUrl: './register.component.html',
-    styles: ['md-card { margin-top: 40px; }']
+    templateUrl: './register.component.html'
 })
 export class RegisterComponent {
     loginForm: FormGroup;

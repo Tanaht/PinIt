@@ -1,22 +1,22 @@
-<md-toolbar color="primary">
+<mat-toolbar color="primary">
     <span>PinIt App</span>
     <span fxFlex="1 1 auto"></span>
     <authentication></authentication>
-</md-toolbar>
-<md-sidenav-container>
-    <md-sidenav class="mat-elevation-z24" mode="side" opened="true" #sidenav>
-      <md-nav-list>
-          <md-list-item routerLink="/">
-              <md-icon>home</md-icon>
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav class="mat-elevation-z24" mode="side" opened="true" #sidenav>
+      <mat-nav-list>
+          <mat-list-item routerLink="/">
+              <mat-icon>home</mat-icon>
               <span class="pi-nav-link">Accueil</span>
-          </md-list-item>
-          <md-list-item routerLink="map">
-              <md-icon fontSet="fa" fontIcon="fa-map"></md-icon>
+          </mat-list-item>
+          <mat-list-item routerLink="map">
+              <mat-icon fontSet="fa" fontIcon="fa-map"></mat-icon>
               <span class="pi-nav-link">Mes endroits favoris</span>
-          </md-list-item>
-      </md-nav-list>
-    </md-sidenav>
-    <div class="pi-content"  fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutAlign="center stretch">
+          </mat-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+    <div class="pi-content"  fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center stretch">
         <router-outlet></router-outlet>
     </div>
-</md-sidenav-container>
+</mat-sidenav-container>

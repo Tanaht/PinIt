@@ -1,7 +1,7 @@
 import {Injectable, Injector} from '@angular/core';
 import {RestService} from '../rest/rest.service';
 import {LoggerService} from '../logger/logger.service';
-import {MatSnackBar, MdSnackBarConfig} from '@angular/material';
+import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {Router} from '@angular/router';
 import {User} from '../model/user';
 
@@ -16,7 +16,7 @@ export class AuthenticationService {
 
     public authenticate(username: string, password: string): void {
         this.logger.debug('AuthenticationService', username, password);
-        const config = new MdSnackBarConfig();
+        const config = new MatSnackBarConfig();
         config.verticalPosition = 'bottom';
         config.horizontalPosition = 'right';
         config.duration = 2000;

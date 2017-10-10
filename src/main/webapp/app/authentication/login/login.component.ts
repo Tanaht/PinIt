@@ -2,12 +2,10 @@ import {Component} from '@angular/core';
 import {AuthenticationService} from '../authentication.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoggerService} from '../../logger/logger.service';
-import {User} from '../../model/user';
 
 @Component({
     selector: 'login',
-    templateUrl: './login.component.html',
-    styles: ['md-card { margin-top: 40px; }']
+    templateUrl: './login.component.html'
 })
 export class LoginComponent {
     public loginForm: FormGroup;

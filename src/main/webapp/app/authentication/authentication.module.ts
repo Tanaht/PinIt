@@ -2,8 +2,8 @@ import {NgModule} from '@angular/core';
 import {LoginComponent} from './login/login.component';
 import {AuthenticationComponent} from './authentication.component';
 import {
-    MdButtonModule, MdCardModule, MdFormFieldModule, MdIconModule, MdInputModule,
-    MdMenuModule, MdSnackBarModule, MatSnackBarModule
+    MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule,
+    MatMenuModule, MatSnackBarModule
 } from '@angular/material';
 import {RegisterComponent} from './register/register.component';
 import {AppRoutingModule} from '../app-routing.module';
@@ -27,13 +27,13 @@ import {CommonModule} from '@angular/common';
         CommonModule,
         ReactiveFormsModule,
         HttpModule,
-        MdMenuModule,
-        MdButtonModule,
-        MdIconModule,
-        MdCardModule,
-        MdInputModule,
-        MdFormFieldModule,
-        MdSnackBarModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSnackBarModule,
         MatSnackBarModule,
         FlexLayoutModule
     ],

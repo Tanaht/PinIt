@@ -5,8 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-    MdButtonModule, MdCardModule, MdIconModule, MdIconRegistry, MdListModule, MdMenuModule, MdSidenavModule,
-    MdToolbarModule
+    MatButtonModule, MatCardModule, MatIconModule, MatIconRegistry, MatListModule, MatMenuModule, MatSidenavModule,
+    MatToolbarModule
 } from '@angular/material';
 
 import {AuthenticationModule} from './authentication/authentication.module';
@@ -18,7 +18,7 @@ import {HttpModule} from '@angular/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import { MapComponent } from './map/map.component';
-import {AuthenticationService} from './authentication/authentication.service';
+import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
     declarations: [
@@ -33,26 +33,30 @@ import {AuthenticationService} from './authentication/authentication.service';
         CommonModule,
         ReactiveFormsModule,
         HttpModule,
-        MdToolbarModule,
-        MdCardModule,
-        MdSidenavModule,
-        MdButtonModule,
-        MdIconModule,
-        MdListModule,
-        MdMenuModule,
-        MdButtonModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatMenuModule,
+        MatButtonModule,
+
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyCQaM6Mw4t5EbZVhbab3mBuWWROC_pcNT0'
+        }),
 
         FlexLayoutModule,
 
         AuthenticationModule,
     ],
     providers: [
-        MdIconRegistry, RestService, LoggerService
+        MatIconRegistry, RestService, LoggerService
     ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor(iconReg: MdIconRegistry) {
+    constructor(iconReg: MatIconRegistry) {
         iconReg.registerFontClassAlias('fontawesome', 'fa');
     }
 }
