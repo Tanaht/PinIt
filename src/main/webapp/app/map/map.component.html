@@ -6,8 +6,10 @@
     Mes endroits favoris !!!
   </mat-card-subtitle>
   <mat-card-content  fxLayout="column">
-    <agm-map [latitude]="lat" [longitude]="long" fxFlexFill [zoom]="15">
-      <agm-marker [latitude]="lat" [longitude]="long"></agm-marker>
+    <agm-map [latitude]="lat" [longitude]="long" fxFlexFill [zoom]="6">
+      <agm-marker [latitude]="marker.lat" [longitude]="marker.long" *ngFor="let marker of markers">
+          <agm-info-window>{{ marker.sport }}</agm-info-window>
+      </agm-marker>
     </agm-map>
   </mat-card-content>
 </mat-card>
