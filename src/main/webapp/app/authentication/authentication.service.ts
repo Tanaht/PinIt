@@ -3,7 +3,6 @@ import {RestService} from '../rest/rest.service';
 import {LoggerService} from '../logger/logger.service';
 import {MatSnackBar, MdSnackBarConfig} from '@angular/material';
 import {Router} from '@angular/router';
-import {RegisterComponent} from './register/register.component';
 
 @Injectable()
 export class AuthenticationService {
@@ -34,20 +33,20 @@ export class AuthenticationService {
         );
     }
 
-    public register(username: string, password: string, email: string): void{
+    public register(username: string, password: string, email: string): void {
         this.logger.debug('AuthenticationService register', username, password, email);
-        let config = new MdSnackBarConfig();
+        const config = new MdSnackBarConfig();
 
         this.rest.post('/api/users', { login: username, password: password, email: email}).subscribe(
             (data) => {
 
-                this.logger.error("result",data);
+                this.logger.error("Authenticationservice", "register success", data);
                 this.router.navigateByUrl("/");
             },
             (err) => {
 
-                this.logger.error('Register failed', err);
-                if(err.status == 400){
+                this.logger.error("Authenticationservice", "bad login", err);
+                if (err.status === 400) {
                     config.extraClasses = ['pi-snackbar-warn'];
                     this.snackBar.open("Ce login existe déjà !", null, config);
                 }

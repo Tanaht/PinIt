@@ -23,7 +23,7 @@ export class RegisterComponent {
             password: ['', Validators.required],
             passwordConfirm: ['', Validators.required],
             email: ['', Validators.email]
-        },{validator: this.checkPasswordsConfirm});
+        }, {validator: this.checkPasswordsConfirm});
     }
 
     register(): void {
