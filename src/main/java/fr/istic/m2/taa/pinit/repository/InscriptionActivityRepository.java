@@ -12,4 +12,7 @@ import java.util.List;
 public interface InscriptionActivityRepository extends JpaRepository<InscriptionActivity, String> {
 
     List<InscriptionActivity> findAllByUser_Login(String login);
+
+
+    List<InscriptionActivity> findAllByUser_Id(long userId);
 }

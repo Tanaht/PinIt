@@ -1,22 +1,28 @@
 package fr.istic.m2.taa.pinit.web.rest;
 
+import fr.istic.m2.taa.pinit.domain.Activity;
 import fr.istic.m2.taa.pinit.domain.InscriptionActivity;
+import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.ActivityRepository;
 import fr.istic.m2.taa.pinit.repository.InscriptionActivityRepository;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.service.ActivityService;
 import fr.istic.m2.taa.pinit.service.InscriptionActivityService;
 import fr.istic.m2.taa.pinit.service.UserService;
+import fr.istic.m2.taa.pinit.web.rest.exception.BadActivityId;
+import fr.istic.m2.taa.pinit.web.rest.exception.BadUserId;
+import fr.istic.m2.taa.pinit.web.rest.model.InscriptionActivityRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -44,19 +50,49 @@ public class InscriptionActivityResource {
 
 
     @GetMapping("/inscriptions")
-    @Secured("ROLE_USER")
-    public List<InscriptionActivity> getAllInscriptionActivity(String userLogin){
-        return inscriptionActivityRepository.findAllByUser_Login(userLogin);
+    //@Secured("ROLE_USER")
+    public List<InscriptionActivity> getInscriptionActivitiesByID(long userId) throws BadUserId {
+        Optional<User> potentialUser = userRepository.findUserById(userId);
+        if (!potentialUser.isPresent()){
+            throw new BadUserId(userId);
+        }
+        return inscriptionActivityRepository.findAllByUser_Id(userId);
     }
 
     @PostMapping("/inscriptions")
-    @Secured("ROLE_USER")
-    public void addInscriptionToUser(){
+    //@Secured("ROLE_USER")
+    public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId {
+        Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
 
+        if (!potentialUser.isPresent()){
+            //return
+            throw new BadUserId(ins.getUserId());
+        }
+
+        Optional<Activity> potentialActivity = activityRepository.findById(ins.getActivityId());
+
+        if (!potentialActivity.isPresent()){
+            //throw new BadUserId(ins.getLogin());
+        }
+
+        InscriptionActivity inscriptionActivity = new InscriptionActivity();
+
+        inscriptionActivity.setUser(potentialUser.get());
+
+        inscriptionActivity.setActivity(potentialActivity.get());
+        inscriptionActivity.setLocalisation(ins.getCoordonne());
+
+        inscriptionActivityRepository.save(inscriptionActivity);
+
+
+        return ResponseEntity.ok().build();
     }
 
 
 
-
+    @ExceptionHandler({BadUserId.class, BadActivityId.class})
+    void handleBadRequests(HttpServletResponse response, Exception e) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    }
 
 }
