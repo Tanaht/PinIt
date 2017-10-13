@@ -1,6 +1,7 @@
 package fr.istic.m2.taa.pinit.web.rest;
 
 import fr.istic.m2.taa.pinit.domain.Activity;
+import fr.istic.m2.taa.pinit.domain.Authority;
 import fr.istic.m2.taa.pinit.domain.InscriptionActivity;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.ActivityRepository;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +52,7 @@ public class InscriptionActivityResource {
 
 
     @GetMapping("/inscriptions")
-    //@Secured("ROLE_USER")
+    @Secured(Authority.USER)
     public List<InscriptionActivity> getInscriptionActivitiesByID(long userId) throws BadUserId {
         Optional<User> potentialUser = userRepository.findUserById(userId);
         if (!potentialUser.isPresent()){
@@ -60,7 +62,7 @@ public class InscriptionActivityResource {
     }
 
     @PostMapping("/inscriptions")
-    //@Secured("ROLE_USER")
+    @Secured(Authority.USER)
     public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId {
         Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
 
