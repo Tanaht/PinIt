@@ -19,11 +19,13 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import { MapComponent } from './map/map.component';
 import {AgmCoreModule} from '@agm/core';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        MapComponent
+        MapComponent,
+        HomeComponent
     ],
     imports: [
         BrowserModule,

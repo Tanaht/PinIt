@@ -14,12 +14,15 @@ import {LoggerService} from '../logger/logger.service';
 import {RestService} from '../rest/rest.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {AuthGuardService} from './auth-guard.service';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
     declarations: [
         AuthenticationComponent,
         LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+        LogoutComponent
     ],
     imports: [
         AppRoutingModule,
@@ -38,6 +41,7 @@ import {CommonModule} from '@angular/common';
         FlexLayoutModule
     ],
     providers: [
+        AuthGuardService,
         LoggerService,
         RestService,
         AuthenticationService

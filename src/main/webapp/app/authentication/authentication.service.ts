@@ -12,6 +12,7 @@ export class AuthenticationService {
 
     constructor(private router: Router, private snackBar: MatSnackBar, private logger: LoggerService, private injector: Injector) {
         this.rest = injector.get(RestService);
+        this.user = null;
     }
 
     public authenticate(username: string, password: string): void {
