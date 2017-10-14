@@ -9,6 +9,7 @@ import {LogoutComponent} from './authentication/logout/logout.component';
 import {HomeComponent} from './home/home.component';
 
 const appRoutes: Routes = [
+    { path: '', pathMatch: 'full', redirectTo: 'home'},
     { path: 'home', component: HomeComponent},
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },

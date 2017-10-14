@@ -4,6 +4,7 @@ import {LoggerService} from '../logger/logger.service';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {Router} from '@angular/router';
 import {User} from '../model/user';
+import {Authority} from '../model/authority';
 
 @Injectable()
 export class AuthenticationService {
@@ -22,13 +23,19 @@ export class AuthenticationService {
         config.horizontalPosition = 'right';
         config.duration = 2000;
 
-        this.rest.post('/api/authenticate/login', { login: username, password: password}).subscribe(
-            (data) => {
+        this.rest.post('/api/authenticate/login', { login: username, password: password}).map(function(res) {
 
-                this.user = new User(username, data.json().token);
+            return new User(res.json().login, res.json().authorities.map(function(authority) {
+                return new Authority(authority.authority);
+            }), res.headers.get('token'), res.json().email);
+
+        }).subscribe(
+            (user) => {
+                this.user = user;
+
                 this.logger.debug('AuthenticationService', 'TOKEN', this.user.token);
                 this.snackBar.open("Bonjour " + this.user.username, null, config);
-                this.router.navigateByUrl("/register");
+                this.router.navigateByUrl("/");
             },
             (err) => {
                 this.logger.error('AuthenticationService', err);
@@ -42,21 +49,18 @@ export class AuthenticationService {
 
     public register(username: string, password: string, email: string): void {
         this.logger.debug('AuthenticationService register', username, password, email);
-        const config = new MdSnackBarConfig();
+        const config = new MatSnackBarConfig();
 
         this.rest.post('/api/users', { login: username, password: password, email: email}).subscribe(
             (data) => {
 
-                this.logger.error("Authenticationservice", "register success", data);
-                this.router.navigateByUrl("/");
+                this.logger.debug("AuthenticationService", "Success to register a new user", data);
+                this.router.navigateByUrl("home");
             },
             (err) => {
-
-                this.logger.error("Authenticationservice", "bad login", err);
-                if (err.status === 400) {
-                    config.extraClasses = ['pi-snackbar-warn'];
-                    this.snackBar.open("Ce login existe déjà !", null, config);
-                }
+                this.logger.error("AuthenticationService", "Une erreur à eu lieu lors de l'inscription", err);
+                config.extraClasses = ['pi-snackbar-warn'];
+                this.snackBar.open("Une erreur à eu lieu lors de l'inscription !", null, config);
 
             }
         );
