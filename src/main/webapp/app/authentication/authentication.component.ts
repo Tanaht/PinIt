@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {MatMenu} from '@angular/material';
+import {AuthenticationService} from './authentication.service';
 
 @Component({
     selector: 'authentication',
@@ -7,4 +8,6 @@ import {MatMenu} from '@angular/material';
 })
 export class AuthenticationComponent {
     authenticationMenu: MatMenu;
+
+    constructor(public auth: AuthenticationService) {}
 }

@@ -11,7 +11,7 @@
                     <mat-icon>home</mat-icon>
                     <span class="pi-nav-link">Accueil</span>
                 </mat-list-item>
-                <mat-list-item routerLink="map">
+                <mat-list-item routerLink="map" *ngIf="auth.isAuthenticated()">
                     <mat-icon fontSet="fa" fontIcon="fa-map"></mat-icon>
                     <span class="pi-nav-link">Mes endroits favoris</span>
                 </mat-list-item>
