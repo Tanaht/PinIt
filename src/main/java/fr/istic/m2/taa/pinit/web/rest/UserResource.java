@@ -4,6 +4,7 @@ import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.service.UserService;
 import fr.istic.m2.taa.pinit.web.rest.model.Login;
+import fr.istic.m2.taa.pinit.web.rest.model.UserRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +33,14 @@ public class UserResource {
     }
 
     @PostMapping("/users")
-    public String createUser(@Valid @RequestBody User newUser){
+    public ResponseEntity createUser(@Valid @RequestBody UserRegister newUser){
         log.debug("REST request to save User : {}", newUser);
 
         if (userRepository.findOneByLogin(newUser.getLogin().toLowerCase()).isPresent()) {
-            return "user already exist";
+            return ResponseEntity.status(400).body("login already exist");
         } else {
             userService.createUser(newUser);
-            return "user created";
+            return ResponseEntity.ok("user created");
         }
     }
 }
