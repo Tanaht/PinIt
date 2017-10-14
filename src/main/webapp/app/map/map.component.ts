@@ -4,7 +4,7 @@ import {ActivityMarker} from '../model/activity-marker';
 @Component({
   selector: 'map-view',
   templateUrl: './map.component.html',
-  styles: ['mat-card-content{height: 400px}']
+  styleUrls: ['../router-outlet-component-layout.css', './map.component.css'],
 })
 export class MapComponent implements OnInit {
   lat: number;

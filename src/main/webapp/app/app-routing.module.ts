@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {RouterModule, RouterOutlet, Routes} from '@angular/router';
 
 import {LoginComponent} from './authentication/login/login.component';
 import {RegisterComponent} from './authentication/register/register.component';
@@ -22,4 +22,8 @@ const appRoutes: Routes = [
         RouterModule
     ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+/*    constructor(private router: RouterOutlet) {
+        this.router.
+    }*/
+}

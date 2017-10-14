@@ -5,7 +5,8 @@ import {LoggerService} from '../../logger/logger.service';
 
 @Component({
     selector: 'login',
-    templateUrl: './login.component.html'
+    templateUrl: './login.component.html',
+    styleUrls: ['../../router-outlet-component-layout.css'],
 })
 export class LoginComponent {
     public loginForm: FormGroup;

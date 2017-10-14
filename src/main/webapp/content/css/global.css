@@ -1,15 +1,9 @@
+body {
+    margin: 0;
+}
+
 mat-icon[fontSet='fa'] {
     font-size: 24px;
-}
-
-html, body, app-root, mat-sidenav-container {
-    margin:0;
-    width: 100%;
-    height:100%;
-}
-
-mat-sidenav {
-    width: 200px;
 }
 
 span.pi-flex-space {
@@ -19,12 +13,4 @@ span.pi-flex-space {
 snack-bar-container.pi-snackbar-warn {
     background: #f44336;
     color: #fff;
-}
-
-div.pi-content mat-card:first-child {
-    margin-top: 40px!important;
-}
-
-div.pi-content > :nth-child(2) {
-    flex: 1 1 auto;
 }
