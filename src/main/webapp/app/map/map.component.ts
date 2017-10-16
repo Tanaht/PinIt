@@ -1,36 +1,68 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {ActivityMarker} from '../model/activity-marker';
 import {RestService} from '../rest/rest.service';
 import {LoggerService} from '../logger/logger.service';
 import {AuthenticationService} from '../authentication/authentication.service';
+import {AgmMap} from '@agm/core';
+import {MatDialog} from '@angular/material';
+import {MarkerEditorComponent} from '../marker-editor/marker-editor.component';
 
 @Component({
-  selector: 'map-view',
-  templateUrl: './map.component.html',
-  styleUrls: ['../router-outlet-component-layout.css', './map.component.css'],
+    selector: 'map-view',
+    templateUrl: './map.component.html',
+    styleUrls: ['../router-outlet-component-layout.css', './map.component.css']
 })
 export class MapComponent implements OnInit {
   lat: number;
   long: number;
+  zoom: number;
+
   markers: ActivityMarker[];
 
-  constructor(private rest: RestService, private logger: LoggerService, private auth: AuthenticationService) {}
+  @ViewChild(AgmMap)
+  private agmMap: AgmMap;
+
+  constructor(private rest: RestService, private logger: LoggerService, private auth: AuthenticationService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.lat = 46.1369301;
-    this.long = -2.4342062;
+    this.long = 1.5648173;
+    this.zoom = 6;
+    this.agmMap.usePanning = true;
 
+    this.logger.debug("MapComponent", this.agmMap);
     this.loadMarkers();
   }
 
+  public zoomOn(marker: ActivityMarker): void {
+      this.zoom = 12;
+      this.lat = marker.lat;
+      this.long = marker.long;
+  }
+
   private loadMarkers(): void {
-      this.rest.retrieve("/api/inscriptions/" + this.auth.getUser().id).subscribe((value) => { this.logger.debug("MapComponent", value); });
-      // here load markers from rest, but now we used a static source;
-      this.markers = [
-          new ActivityMarker(49.335, -0.454, "Surf"),
-          new ActivityMarker(48.8544586, 2.3388662, "Balade en ville"),
-          new ActivityMarker(45.892, -3.093, "Noyade"),
-          new ActivityMarker(48.1148993, -1.6370679, "Etude"),
-      ];
+      this.rest.retrieve('/api/users/' + this.auth.getUser().id + '/inscriptions').map(function(res) {
+          let array: object[];
+          array = res as object[];
+
+          return array.map(function(item) {
+              return new ActivityMarker(item['localisation'].latitude, item['localisation'].longitude, item['activity'].nameActivity);
+          });
+      }).subscribe((value) => {
+          this.logger.debug('MapComponent', value);
+          this.markers = value;
+      });
+  }
+
+  public addActivity($event: EventEmitter<MouseEvent>): void {
+      this.logger.info("MapComponent#AddActivity()", "Add a new Activity at: " + $event['coords'].lat + ', ' + $event['coords'].lng);
+
+      let dialogRef = this.dialog.open(MarkerEditorComponent, {
+          height: '400px',
+          width: '600px',
+          data: new ActivityMarker($event['coords'].lat, $event['coords'].lng, "")
+      });
+
+      // this.markers.push(new ActivityMarker($event['coords'].lat, $event['coords'].lng, ""));
   }
 }

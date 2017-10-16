@@ -1,22 +1,28 @@
-<mat-card class="mat-card">
-  <mat-card-title class="mat-card-title">
-    Carte intéractive
-  </mat-card-title>
-  <mat-card-subtitle class="mat-card-subtitle">
-    Mes endroits favoris !!!
-  </mat-card-subtitle>
-  <mat-card-content>
-    <agm-map [latitude]="lat" [longitude]="long" [zoom]="6">
-      <agm-marker [latitude]="marker.lat" [longitude]="marker.long" *ngFor="let marker of markers">
-        <agm-info-window>{{ marker.sport }}</agm-info-window>
-      </agm-marker>
-    </agm-map>
-  </mat-card-content>
-</mat-card>
-<mat-card>
-  <mat-card-title>Localisations</mat-card-title>
-  <mat-card-subtitle>Liste des sports</mat-card-subtitle>
-  <mat-list>
-    <mat-list-item *ngFor="let marker of markers">{{ marker.sport }}</mat-list-item>
-  </mat-list>
-</mat-card>
+<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlexFill fxLayoutAlign="space-around center">
+  <mat-card class="pi-map-wrapper" fxFlex="60" fxFlexAlign="stretch">
+    <mat-card-title>
+      Carte intéractive
+    </mat-card-title>
+    <mat-card-subtitle>
+      Mes endroits favoris !!!
+    </mat-card-subtitle>
+    <mat-card-content>
+      <agm-map [latitude]="lat" [longitude]="long" [zoom]="zoom" (mapClick)="addActivity($event)" #agmMap>
+        <agm-marker [latitude]="marker.lat" [longitude]="marker.long" *ngFor="let marker of markers">
+          <agm-info-window>{{ marker.sport }}</agm-info-window>
+        </agm-marker>
+      </agm-map>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="pi-markers-wrapper" fxFlex="30" fxFlexAlign="stretch">
+    <mat-card-title>Localisations</mat-card-title>
+    <mat-card-subtitle>Liste des sports</mat-card-subtitle>
+    <mat-nav-list cdkScrollable>
+      <mat-list-item *ngFor="let marker of markers" (click)="zoomOn(marker)">
+        <mat-icon>location_on</mat-icon>
+        <h4 mat-line>{{ marker.sport }}</h4>
+        <span mat-line>{{ marker.address }}</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-card>
+</div>

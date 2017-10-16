@@ -1,8 +1,5 @@
-/*mat-card mat-card-content {
-    height: 450px;
-}*/
 
 mat-card mat-card-content agm-map{
-    height: 450px;
-    width: 450px;
+    height: 500px;
+    width: 100%;
 }
