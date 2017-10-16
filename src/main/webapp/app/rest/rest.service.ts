@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {LoggerService} from '../logger/logger.service';
 import {Headers, Http, RequestOptionsArgs, Response} from '@angular/http';
 import {Observable, Subscriber} from 'rxjs';
@@ -6,10 +6,9 @@ import {AuthenticationService} from '../authentication/authentication.service';
 
 @Injectable()
 export class RestService {
-
     private headers: Headers;
 
-    constructor(private logger: LoggerService, private http: Http/*, private auth: AuthenticationService*/) {
+    constructor(private logger: LoggerService, private http: Http, private auth: AuthenticationService) {
         this.headers = new Headers({'Content-Type': 'application/json'});
     }
 
@@ -22,11 +21,11 @@ export class RestService {
     }
 
     private manipulateHeaders(): void {
-        /*if ( this.auth.isAuthenticated()) {
+        if ( this.auth.isAuthenticated()) {
             this.headers.append("token", this.auth.getUser().token);
         } else {
             this.headers.delete("token");
-        }*/
+        }
     }
 
     public create(uri: string, datas: object): Observable<object> {
@@ -44,7 +43,7 @@ export class RestService {
         });
     }
 
-    public retrieve(uri: string, token: string): Observable<object> {
+    public retrieve(uri: string): Observable<object> {
         this.manipulateHeaders();
         return new Observable<object>((observer: Subscriber<object>) => {
 

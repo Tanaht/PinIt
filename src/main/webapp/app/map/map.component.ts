@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivityMarker} from '../model/activity-marker';
+import {RestService} from '../rest/rest.service';
+import {LoggerService} from '../logger/logger.service';
+import {AuthenticationService} from '../authentication/authentication.service';
 
 @Component({
   selector: 'map-view',
@@ -11,6 +14,8 @@ export class MapComponent implements OnInit {
   long: number;
   markers: ActivityMarker[];
 
+  constructor(private rest: RestService, private logger: LoggerService, private auth: AuthenticationService) {}
+
   ngOnInit() {
     this.lat = 46.1369301;
     this.long = -2.4342062;
@@ -19,6 +24,7 @@ export class MapComponent implements OnInit {
   }
 
   private loadMarkers(): void {
+      this.rest.retrieve("/api/inscriptions/" + this.auth.getUser().id).subscribe((value) => { this.logger.debug("MapComponent", value); });
       // here load markers from rest, but now we used a static source;
       this.markers = [
           new ActivityMarker(49.335, -0.454, "Surf"),

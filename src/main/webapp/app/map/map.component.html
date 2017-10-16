@@ -13,3 +13,10 @@
     </agm-map>
   </mat-card-content>
 </mat-card>
+<mat-card>
+  <mat-card-title>Localisations</mat-card-title>
+  <mat-card-subtitle>Liste des sports</mat-card-subtitle>
+  <mat-list>
+    <mat-list-item *ngFor="let marker of markers">{{ marker.sport }}</mat-list-item>
+  </mat-list>
+</mat-card>

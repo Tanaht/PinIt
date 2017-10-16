@@ -1,6 +1,6 @@
 import './vendor.ts';
 
-import { NgModule } from '@angular/core';
+import {isDevMode, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -20,6 +20,7 @@ import {CommonModule} from '@angular/common';
 import { MapComponent } from './map/map.component';
 import {AgmCoreModule} from '@agm/core';
 import { HomeComponent } from './home/home.component';
+import {AuthenticationService} from './authentication/authentication.service';
 
 @NgModule({
     declarations: [
@@ -58,7 +59,12 @@ import { HomeComponent } from './home/home.component';
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor(iconReg: MatIconRegistry) {
+    constructor(iconReg: MatIconRegistry, auth: AuthenticationService) {
         iconReg.registerFontClassAlias('fontawesome', 'fa');
+
+        // Generate values for dev purpose
+        if ( isDevMode()) {
+            auth.authenticate('user', '123456');
+        }
     }
 }

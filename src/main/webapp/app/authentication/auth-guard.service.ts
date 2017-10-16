@@ -18,7 +18,7 @@ export class AuthGuardService implements CanActivate {
         config.duration = 2000;
 
         if (this.auth.isAuthenticated()) {
-            this.log.info("AuthGuardService", "Access granted for user '" + this.auth.getUser().username + "' at " + route.url);
+            this.log.info("AuthGuardService", "Access granted for user '" + this.auth.getUser().username + "'");
             return true;
         } else {
             config.extraClasses = ['pi-snackbar-warn'];

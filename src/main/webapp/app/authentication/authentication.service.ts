@@ -5,14 +5,13 @@ import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {Router} from '@angular/router';
 import {User} from '../model/user';
 import {Authority} from '../model/authority';
+import {Http} from '@angular/http';
 
 @Injectable()
 export class AuthenticationService {
     private user: User;
-    private rest: RestService;
 
-    constructor(private router: Router, private snackBar: MatSnackBar, private logger: LoggerService, private injector: Injector) {
-        this.rest = injector.get(RestService);
+    constructor(private router: Router, private snackBar: MatSnackBar, private logger: LoggerService, private http: Http) {
         this.user = null;
     }
 
@@ -23,9 +22,9 @@ export class AuthenticationService {
         config.horizontalPosition = 'right';
         config.duration = 2000;
 
-        this.rest.post('/api/authenticate/login', { login: username, password: password}).map(function(res) {
+        this.http.post('/api/authenticate/login', { login: username, password: password}).map(function(res) {
 
-            return new User(res.json().login, res.json().authorities.map(function(authority) {
+            return new User(res.json().id, res.json().login, res.json().authorities.map(function(authority) {
                 return new Authority(authority.authority);
             }), res.headers.get('token'), res.json().email);
 
@@ -51,7 +50,7 @@ export class AuthenticationService {
         this.logger.debug('AuthenticationService register', username, password, email);
         const config = new MatSnackBarConfig();
 
-        this.rest.post('/api/users', { login: username, password: password, email: email}).subscribe(
+        this.http.post('/api/users', { login: username, password: password, email: email}).subscribe(
             (data) => {
 
                 this.logger.debug("AuthenticationService", "Success to register a new user", data);
