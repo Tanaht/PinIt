@@ -51,7 +51,7 @@ public class InscriptionActivityResource {
     }
 
 
-    @RequestMapping(value="/user/{userId}/inscriptions", method = RequestMethod.GET)
+    @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.GET)
     @Secured(Authority.USER)
     public List<InscriptionActivity> getInscriptionActivitiesByID(@PathVariable("userId") long userId) throws BadUserId {
 
@@ -62,7 +62,7 @@ public class InscriptionActivityResource {
         return inscriptionActivityRepository.findAllByUser_Id(userId);
     }
 
-    @RequestMapping(value="/user/{userId}/inscriptions", method = RequestMethod.POST)
+    @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.POST)
     @Secured(Authority.USER)
     public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId {
         Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
@@ -87,7 +87,7 @@ public class InscriptionActivityResource {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value="/inscription/{inscriptionId}", method = RequestMethod.DELETE)
+    @RequestMapping(value="/inscriptions/{inscriptionId}", method = RequestMethod.DELETE)
     @Secured(Authority.USER)
     public ResponseEntity removeInscriptionById(@PathVariable("inscriptionId") long inscriptionId) throws BadActivityId{
 
