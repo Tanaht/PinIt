@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -17,4 +18,7 @@ public interface InscriptionActivityRepository extends JpaRepository<Inscription
     List<InscriptionActivity> findAllByUser_Id(long userId);
 
     void deleteById(long inscriptionId);
+
+    Optional<InscriptionActivity> findById(long inscriptionActivityId);
+
 }
