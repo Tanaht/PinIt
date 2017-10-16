@@ -51,9 +51,10 @@ public class InscriptionActivityResource {
     }
 
 
-    @GetMapping("/inscriptions")
+    @RequestMapping(value="/user/{userId}/inscriptions", method = RequestMethod.GET)
     @Secured(Authority.USER)
-    public List<InscriptionActivity> getInscriptionActivitiesByID(long userId) throws BadUserId {
+    public List<InscriptionActivity> getInscriptionActivitiesByID(@PathVariable("userId") long userId) throws BadUserId {
+
         Optional<User> potentialUser = userRepository.findUserById(userId);
         if (!potentialUser.isPresent()){
             throw new BadUserId(userId);
@@ -61,13 +62,12 @@ public class InscriptionActivityResource {
         return inscriptionActivityRepository.findAllByUser_Id(userId);
     }
 
-    @PostMapping("/inscriptions")
-    @Secured(Authority.USER)
+    @RequestMapping(value="/user/{userId}/inscriptions", method = RequestMethod.POST)
+    //@Secured(Authority.USER)
     public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId {
         Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
 
         if (!potentialUser.isPresent()){
-            //return
             throw new BadUserId(ins.getUserId());
         }
 
@@ -87,6 +87,19 @@ public class InscriptionActivityResource {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value="/inscription/{inscriptionId}", method = RequestMethod.DELETE)
+    //@Secured(Authority.USER)
+    public ResponseEntity removeInscriptionById(@PathVariable("inscriptionId") long inscriptionId) throws BadActivityId{
+
+        Optional<Activity> potentialActivity = activityRepository.findById(inscriptionId);
+        if (!potentialActivity.isPresent()){
+            throw new BadActivityId(inscriptionId);
+        }
+
+        inscriptionActivityRepository.deleteById(inscriptionId);
+
+        return ResponseEntity.ok().build();
+    }
 
 
     @ExceptionHandler({BadUserId.class, BadActivityId.class})
