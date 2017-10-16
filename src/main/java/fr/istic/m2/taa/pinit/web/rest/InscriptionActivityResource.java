@@ -11,6 +11,7 @@ import fr.istic.m2.taa.pinit.service.ActivityService;
 import fr.istic.m2.taa.pinit.service.InscriptionActivityService;
 import fr.istic.m2.taa.pinit.service.UserService;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadActivityId;
+import fr.istic.m2.taa.pinit.web.rest.exception.BadInscriptionActivityId;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadUserId;
 import fr.istic.m2.taa.pinit.web.rest.model.InscriptionActivityRegister;
 import org.slf4j.Logger;
@@ -101,8 +102,30 @@ public class InscriptionActivityResource {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value="/inscriptions/{inscriptionId}", method = RequestMethod.PUT)
+    @Secured(Authority.USER)
+    public ResponseEntity editInscriptionActivity(@PathVariable("inscriptionId") long inscriptionId,@RequestBody InscriptionActivityRegister ins) throws BadActivityId, BadUserId, BadInscriptionActivityId {
+        Optional<Activity> potentialActivity = activityRepository.findById(ins.getActivityId());
+        if (!potentialActivity.isPresent()){
+            throw new BadActivityId(ins.getActivityId());
+        }
+        Optional<InscriptionActivity> potentialInscriptionActivity = inscriptionActivityRepository.findById(inscriptionId);
 
-    @ExceptionHandler({BadUserId.class, BadActivityId.class})
+        if (!potentialInscriptionActivity.isPresent()){
+            throw new BadInscriptionActivityId(inscriptionId);
+        }
+
+        InscriptionActivity inscriptionActivity = potentialInscriptionActivity.get();
+        inscriptionActivity.setActivity(potentialActivity.get());
+        inscriptionActivity.setLocalisation(ins.getCoordonne());
+
+        inscriptionActivityRepository.save(inscriptionActivity);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    @ExceptionHandler({BadUserId.class, BadActivityId.class,BadInscriptionActivityId.class})
     void handleBadRequests(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
