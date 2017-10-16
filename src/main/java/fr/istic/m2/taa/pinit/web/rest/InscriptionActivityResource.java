@@ -1,5 +1,6 @@
 package fr.istic.m2.taa.pinit.web.rest;
 
+import fr.istic.m2.taa.pinit.config.security.SecurityUtils;
 import fr.istic.m2.taa.pinit.domain.Activity;
 import fr.istic.m2.taa.pinit.domain.Authority;
 import fr.istic.m2.taa.pinit.domain.InscriptionActivity;
@@ -12,6 +13,7 @@ import fr.istic.m2.taa.pinit.service.InscriptionActivityService;
 import fr.istic.m2.taa.pinit.service.UserService;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadActivityId;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadUserId;
+import fr.istic.m2.taa.pinit.web.rest.exception.NotAuthorized;
 import fr.istic.m2.taa.pinit.web.rest.model.InscriptionActivityRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,22 +55,32 @@ public class InscriptionActivityResource {
 
     @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.GET)
     @Secured(Authority.USER)
-    public List<InscriptionActivity> getInscriptionActivitiesByID(@PathVariable("userId") long userId) throws BadUserId {
+    public List<InscriptionActivity> getInscriptionActivitiesByID(@PathVariable("userId") long userId) throws BadUserId, NotAuthorized {
 
         Optional<User> potentialUser = userRepository.findUserById(userId);
         if (!potentialUser.isPresent()){
             throw new BadUserId(userId);
+        }
+
+        long actualUser = SecurityUtils.getCurrentUserLoginId();
+        if (actualUser != userId && !SecurityUtils.isCurrentUserInRole(Authority.ADMIN)){
+            throw new NotAuthorized("User not authorized to get inscriptionActivity of another user");
         }
         return inscriptionActivityRepository.findAllByUser_Id(userId);
     }
 
     @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.POST)
     @Secured(Authority.USER)
-    public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId {
+    public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId, NotAuthorized {
         Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
 
         if (!potentialUser.isPresent()){
             throw new BadUserId(ins.getUserId());
+        }
+
+        long actualUser = SecurityUtils.getCurrentUserLoginId();
+        if (actualUser != ins.getUserId() && !SecurityUtils.isCurrentUserInRole(Authority.ADMIN)){
+            throw new NotAuthorized("User not authorized to edit inscriptionActivity of another user");
         }
 
         Optional<Activity> potentialActivity = activityRepository.findById(ins.getActivityId());
@@ -95,6 +107,8 @@ public class InscriptionActivityResource {
         if (!potentialActivity.isPresent()){
             throw new BadActivityId(inscriptionId);
         }
+
+
 
         inscriptionActivityRepository.deleteById(inscriptionId);
 

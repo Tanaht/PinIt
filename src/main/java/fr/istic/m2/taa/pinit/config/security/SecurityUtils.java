@@ -1,6 +1,8 @@
 package fr.istic.m2.taa.pinit.config.security;
 
 import fr.istic.m2.taa.pinit.domain.Authority;
+import fr.istic.m2.taa.pinit.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +13,12 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public final class SecurityUtils {
 
-    private SecurityUtils() {
+    @Autowired
+    private static UserRepository userRepository;
+
+
+    public static long getCurrentUserLoginId(){
+        return userRepository.findOneByLogin(getCurrentUserLogin()).get().getId();
     }
 
     /**
@@ -31,8 +38,12 @@ public final class SecurityUtils {
                 userName = (String) authentication.getPrincipal();
             }
         }
+
         return userName;
     }
+
+
+
 
     /**
      * Get the JWT of the current user.
@@ -47,6 +58,9 @@ public final class SecurityUtils {
         }
         return null;
     }
+
+
+
 
     /**
      * Check if a user is authenticated.
