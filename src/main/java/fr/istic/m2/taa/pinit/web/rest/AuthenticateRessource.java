@@ -3,6 +3,7 @@ package fr.istic.m2.taa.pinit.web.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.istic.m2.taa.pinit.config.security.JWTConfigurer;
 import fr.istic.m2.taa.pinit.config.security.TokenProvider;
+import fr.istic.m2.taa.pinit.domain.Authority;
 import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.service.AuthenticateService;
@@ -10,6 +11,7 @@ import fr.istic.m2.taa.pinit.web.rest.model.Login;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,8 +58,9 @@ public class AuthenticateRessource{
         return userRepository.findOneByLogin(login.getLogin()).get();
     }
 
-    @GetMapping("/authenticate/logout")
-    public boolean disconnectUser(@RequestBody String userLogin){
+    @RequestMapping(value="/authenticate/logout", method = RequestMethod.GET)
+    @Secured(Authority.USER)
+    public boolean disconnectUser(){
 
         return true;
     }
