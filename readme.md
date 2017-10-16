@@ -69,3 +69,19 @@ class Authority {
     private static final String USER = "ROLE_USER";
 }
 ```
+
+###API
+
+`POST /api/authenticate/login`: Permet la connexion d'un utilisateur.
+
+`GET /api/authenticate/logout` Permet la déconnexion d'un utilisateur.
+
+`POST /api/users`: Permet de créer un nouvel utilisateur.
+
+`GET /api/users/{idUser}/inscriptions`: Permet de retourner tous les lieux choisit par un utilisateur
+
+`POST /api/users/{idUser}/inscriptions`: Permet de rajouter une inscription.
+
+`DELETE /api/inscriptions/{idInscription}`: Permet de supprimer une inscription.
+
+`PUT /api/inscriptions/{idInscription}`: Permet de modifier une inscription.
