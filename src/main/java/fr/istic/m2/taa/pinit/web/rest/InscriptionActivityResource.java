@@ -63,7 +63,7 @@ public class InscriptionActivityResource {
     }
 
     @RequestMapping(value="/user/{userId}/inscriptions", method = RequestMethod.POST)
-    //@Secured(Authority.USER)
+    @Secured(Authority.USER)
     public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId {
         Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
 
@@ -88,7 +88,7 @@ public class InscriptionActivityResource {
     }
 
     @RequestMapping(value="/inscription/{inscriptionId}", method = RequestMethod.DELETE)
-    //@Secured(Authority.USER)
+    @Secured(Authority.USER)
     public ResponseEntity removeInscriptionById(@PathVariable("inscriptionId") long inscriptionId) throws BadActivityId{
 
         Optional<Activity> potentialActivity = activityRepository.findById(inscriptionId);
