@@ -1,8 +1,8 @@
 import {Injectable, Injector} from '@angular/core';
-import {LoggerService} from '../logger/logger.service';
+import {LoggerService} from '../../logger/logger.service';
 import {Headers, Http, RequestOptionsArgs, Response} from '@angular/http';
 import {Observable, Subscriber} from 'rxjs';
-import {AuthenticationService} from '../authentication/authentication.service';
+import {AuthenticationService} from '../../authentication/authentication.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable()

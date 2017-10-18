@@ -1,18 +1,22 @@
 import {AppModule} from '../app.module';
-import {RestService} from '../rest/rest.service';
+import {RestService} from '../services/rest/rest.service';
+import {Activity} from './activity';
 
 export class ActivityMarker {
+    id: number;
+
     lat: number;
     long: number;
-    sport: string;
+    activity: Activity;
     address: string;
 
     rest: RestService;
 
-    constructor(lat: number, long: number, sport: string) {
+    constructor(id: number, lat: number, long: number, activity: Activity) {
+        this.id = id;
         this.lat = lat;
         this.long = long;
-        this.sport = sport;
+        this.activity = activity;
 
         this.rest = AppModule.injector.get(RestService);
         this.updateAddress();

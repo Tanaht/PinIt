@@ -1,5 +1,5 @@
 import {Injectable, Injector} from '@angular/core';
-import {RestService} from '../rest/rest.service';
+import {RestService} from '../services/rest/rest.service';
 import {LoggerService} from '../logger/logger.service';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {Router} from '@angular/router';

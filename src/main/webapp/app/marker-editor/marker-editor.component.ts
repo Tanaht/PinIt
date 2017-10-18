@@ -1,7 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
+import {Component, Inject, OnInit, ViewChild, ViewRef} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {LoggerService} from '../logger/logger.service';
 import {ActivityMarker} from '../model/activity-marker';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Intent} from '../model/Intent';
+import {ActivityProviderService} from '../services/activity-provider/activity-provider.service';
+import {Activity} from '../model/activity';
 
 @Component({
   selector: 'app-marker-editor',
@@ -9,13 +13,34 @@ import {ActivityMarker} from '../model/activity-marker';
   styles: []
 })
 export class MarkerEditorComponent implements OnInit {
-  marker: ActivityMarker;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public passedMarker: ActivityMarker, private logger: LoggerService) {
-      this.marker = passedMarker;
+    activities: Array<Activity>;
+
+    marker: ActivityMarker;
+  constructor(
+      public dialogRef: MatDialogRef<MarkerEditorComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: ActivityMarker,
+      private logger: LoggerService,
+      private activityProvider: ActivityProviderService) {
+
+      this.marker = data;
+  }
+
+  cancel(): void {
+      this.dialogRef.close(Intent.Dismiss);
+  }
+
+  updateMarker(): void {
+      // this.marker.activity = ...
+      this.dialogRef.close(Intent.Close);
   }
 
   ngOnInit() {
+      this.activityProvider.getActivities().subscribe((activities: Array<Activity>) => {
+          this.logger.debug("MarkerEditorComponent#ngOnInit", "Successfully retrieved activities");
+          this.activities = activities;
+          this.marker.activity = this.activities[0];
+      });
   }
 
 }

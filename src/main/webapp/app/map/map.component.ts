@@ -1,11 +1,13 @@
 import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {ActivityMarker} from '../model/activity-marker';
-import {RestService} from '../rest/rest.service';
+import {RestService} from '../services/rest/rest.service';
 import {LoggerService} from '../logger/logger.service';
 import {AuthenticationService} from '../authentication/authentication.service';
 import {AgmMap} from '@agm/core';
 import {MatDialog} from '@angular/material';
 import {MarkerEditorComponent} from '../marker-editor/marker-editor.component';
+import {Intent} from '../model/Intent';
+import {Activity} from '../model/activity';
 
 @Component({
     selector: 'map-view',
@@ -46,7 +48,12 @@ export class MapComponent implements OnInit {
           array = res as object[];
 
           return array.map(function(item) {
-              return new ActivityMarker(item['localisation'].latitude, item['localisation'].longitude, item['activity'].nameActivity);
+              return new ActivityMarker(
+                  item['localisation'].id,
+                  item['localisation'].latitude,
+                  item['localisation'].longitude,
+                  new Activity(item['activity'].id, item['activity'].nameActivity)
+              );
           });
       }).subscribe((value) => {
           this.logger.debug('MapComponent', value);
@@ -54,15 +61,31 @@ export class MapComponent implements OnInit {
       });
   }
 
+  public edit(marker: ActivityMarker): void {
+      this.dialog.open(MarkerEditorComponent, {
+          data: marker
+      }).afterClosed().subscribe((intent: Intent) => {
+          if (intent === Intent.Close) {
+                // TODO: this.rest.update("/users/" + this.auth.getUser().id + "/inscriptions/" + marker.id, marker);
+          }
+      });
+  }
+
   public addActivity($event: EventEmitter<MouseEvent>): void {
       this.logger.info("MapComponent#AddActivity()", "Add a new Activity at: " + $event['coords'].lat + ', ' + $event['coords'].lng);
 
-      let dialogRef = this.dialog.open(MarkerEditorComponent, {
-          height: '400px',
-          width: '600px',
-          data: new ActivityMarker($event['coords'].lat, $event['coords'].lng, "")
-      });
+      const marker = new ActivityMarker(null, $event['coords'].lat, $event['coords'].lng, null);
 
-      // this.markers.push(new ActivityMarker($event['coords'].lat, $event['coords'].lng, ""));
+      const dialogRef = this.dialog.open(MarkerEditorComponent, {
+          data: marker
+      });
+      dialogRef.afterClosed().subscribe((intent: Intent) => {
+          switch (intent) {
+              case Intent.Close:
+                  // TODO call CREATE Marker here
+                  this.markers.push(marker);
+                  break;
+          }
+      });
   }
 }

@@ -11,7 +11,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {HttpModule} from '@angular/http';
 import {AuthenticationService} from './authentication.service';
 import {LoggerService} from '../logger/logger.service';
-import {RestService} from '../rest/rest.service';
+import {RestService} from '../services/rest/rest.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {AuthGuardService} from './auth-guard.service';
