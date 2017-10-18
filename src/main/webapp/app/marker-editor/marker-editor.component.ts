@@ -26,6 +26,10 @@ export class MarkerEditorComponent implements OnInit {
       this.marker = data;
   }
 
+  byID(item1: Activity, item2: Activity) {
+        return item1.id === item2.id;
+  }
+
   cancel(): void {
       this.dialogRef.close(Intent.Dismiss);
   }
@@ -39,7 +43,6 @@ export class MarkerEditorComponent implements OnInit {
       this.activityProvider.getActivities().subscribe((activities: Array<Activity>) => {
           this.logger.debug("MarkerEditorComponent#ngOnInit", "Successfully retrieved activities");
           this.activities = activities;
-          this.marker.activity = this.activities[0];
       });
   }
 
