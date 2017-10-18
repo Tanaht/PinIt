@@ -1,4 +1,8 @@
 {
+    "lib": [
+        "dom",
+        "es7"
+    ],
     "rulesDirectory": [
         "node_modules/codelyzer"
     ],

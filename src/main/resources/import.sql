@@ -16,6 +16,7 @@ INSERT INTO activity VALUES (2,'Vélo',5,0,5,0,30,10,40,0);
 
 -- inscription
 insert into inscription_activity VALUES (1,48.11,-1.638,1,1);
+insert into inscription_activity VALUES (2,46.8896024,-0.9303045,1,1);
 
 
 INSERT INTO user_authority values(1, 'ROLE_USER');

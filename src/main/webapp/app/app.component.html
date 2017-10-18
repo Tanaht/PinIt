@@ -1,18 +1,26 @@
-<md-toolbar color="primary">
+<mat-toolbar class="mat-elevation-z6" color="primary">
     <span>PinIt App</span>
     <span fxFlex="1 1 auto"></span>
     <authentication></authentication>
-</md-toolbar>
-<md-sidenav-container>
-    <md-sidenav class="mat-elevation-z24" mode="side" opened="true" #sidenav>
-      <md-nav-list>
-          <md-list-item routerLink="/">
-              <md-icon>home</md-icon>
-              <span class="pi-nav-link">Accueil</span>
-          </md-list-item>
-      </md-nav-list>
-    </md-sidenav>
-    <div class="pi-content"  fxLayout="row" fxLayout.xs="column" fxLayoutGap="40px" fxLayoutAlign="center stretch">
-        <router-outlet></router-outlet>
-    </div>
-</md-sidenav-container>
+</mat-toolbar>
+<div class="sidenav-wrapper">
+    <mat-sidenav-container>
+        <mat-sidenav class="mat-elevation-z3" mode="side" opened="true" #sidenav>
+            <mat-nav-list>
+                <mat-list-item routerLink="home">
+                    <mat-icon>home</mat-icon>
+                    <span class="pi-nav-link">Accueil</span>
+                </mat-list-item>
+                <mat-list-item routerLink="map" *ngIf="auth.isAuthenticated()">
+                    <mat-icon fontSet="fa" fontIcon="fa-map"></mat-icon>
+                    <span class="pi-nav-link">Mes endroits favoris</span>
+                </mat-list-item>
+            </mat-nav-list>
+        </mat-sidenav>
+        <mat-sidenav-content cdkscrollable>
+            <div class="pi-content">
+                <router-outlet></router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

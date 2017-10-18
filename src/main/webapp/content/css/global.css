@@ -1,15 +1,9 @@
-md-icon[fontSet='fa'] {
+body {
+    margin: 0;
+}
+
+mat-icon[fontSet='fa'] {
     font-size: 24px;
-}
-
-html, body, app-root, md-sidenav-container {
-    margin:0;
-    width: 100%;
-    height:100%;
-}
-
-md-sidenav {
-    width: 200px;
 }
 
 span.pi-flex-space {

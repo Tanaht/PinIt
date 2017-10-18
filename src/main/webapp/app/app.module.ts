@@ -1,26 +1,39 @@
 import './vendor.ts';
 
-import { NgModule } from '@angular/core';
+import {Injector, isDevMode, NgModule, ReflectiveInjector} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-    MdButtonModule, MdCardModule, MdIconModule, MdIconRegistry, MdListModule, MdMenuModule, MdSidenavModule,
-    MdToolbarModule
+    MatButtonModule, MatCardModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatIconRegistry, MatInputModule,
+    MatListModule,
+    MatMenuModule, MatSelectModule,
+    MatSidenavModule,
+    MatToolbarModule
 } from '@angular/material';
 
 import {AuthenticationModule} from './authentication/authentication.module';
 import {AppRoutingModule} from './app-routing.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {RestService} from './rest/rest.service';
+import {RestService} from './services/rest/rest.service';
 import {LoggerService} from './logger/logger.service';
 import {HttpModule} from '@angular/http';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, NgModel, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import { MapComponent } from './map/map.component';
+import {AgmCoreModule} from '@agm/core';
+import { HomeComponent } from './home/home.component';
+import {AuthenticationService} from './authentication/authentication.service';
+import {HttpClientModule} from '@angular/common/http';
+import { MarkerEditorComponent } from './marker-editor/marker-editor.component';
+import {ActivityProviderService} from './services/activity-provider/activity-provider.service';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        MapComponent,
+        HomeComponent,
+        MarkerEditorComponent
     ],
     imports: [
         BrowserModule,
@@ -29,27 +42,49 @@ import {CommonModule} from '@angular/common';
 
         CommonModule,
         ReactiveFormsModule,
+        HttpClientModule,
         HttpModule,
-        MdToolbarModule,
-        MdCardModule,
-        MdSidenavModule,
-        MdButtonModule,
-        MdIconModule,
-        MdListModule,
-        MdMenuModule,
-        MdButtonModule,
+        MatToolbarModule,
+        MatDialogModule,
+        MatCardModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatIconModule,
+        MatListModule,
+        MatMenuModule,
+        MatButtonModule,
+        FormsModule,
+
+        AgmCoreModule.forRoot({
+            apiKey: AppModule.mapApiKey
+        }),
 
         FlexLayoutModule,
 
         AuthenticationModule,
     ],
+    entryComponents: [MarkerEditorComponent],
     providers: [
-        MdIconRegistry, RestService, LoggerService
+        MatIconRegistry, RestService, LoggerService, ActivityProviderService
     ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor(iconReg: MdIconRegistry) {
+    static mapApiKey: string;
+    static injector: Injector;
+
+    constructor(iconReg: MatIconRegistry, auth: AuthenticationService, injector: Injector) {
+        AppModule.mapApiKey = 'AIzaSyCQaM6Mw4t5EbZVhbab3mBuWWROC_pcNT0';
+
+        AppModule.injector = injector;
         iconReg.registerFontClassAlias('fontawesome', 'fa');
+
+        // Generate values for dev purpose
+        if ( isDevMode()) {
+            auth.authenticate('user', '123456');
+        }
     }
 }

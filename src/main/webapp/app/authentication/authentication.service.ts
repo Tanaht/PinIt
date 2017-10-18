@@ -1,30 +1,43 @@
-import {Injectable} from '@angular/core';
-import {RestService} from '../rest/rest.service';
+import {Injectable, Injector} from '@angular/core';
+import {RestService} from '../services/rest/rest.service';
 import {LoggerService} from '../logger/logger.service';
-import {MatSnackBar, MdSnackBarConfig} from '@angular/material';
+import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {Router} from '@angular/router';
+import {User} from '../model/user';
+import {Authority} from '../model/authority';
+import {Http} from '@angular/http';
 
 @Injectable()
 export class AuthenticationService {
-    private token: string;
-    constructor(private router: Router, private rest: RestService, private snackBar: MatSnackBar, private logger: LoggerService) {}
+    private user: User;
+
+    constructor(private router: Router, private snackBar: MatSnackBar, private logger: LoggerService, private http: Http) {
+        this.user = null;
+    }
 
     public authenticate(username: string, password: string): void {
         this.logger.debug('AuthenticationService', username, password);
-        const config = new MdSnackBarConfig();
+        const config = new MatSnackBarConfig();
         config.verticalPosition = 'bottom';
         config.horizontalPosition = 'right';
         config.duration = 2000;
 
-        this.rest.post('/api/authenticate/login', { login: username, password: password}).subscribe(
-            (data) => {
-                this.token = data.json().token;
-                this.logger.debug('TOKEN', this.token);
-                this.snackBar.open("Bonjour " + username, null, config);
-                this.router.navigateByUrl("/register");
+        this.http.post('/api/authenticate/login', { login: username, password: password}).map(function(res) {
+
+            return new User(res.json().id, res.json().login, res.json().authorities.map(function(authority) {
+                return new Authority(authority.authority);
+            }), res.headers.get('token'), res.json().email);
+
+        }).subscribe(
+            (user) => {
+                this.user = user;
+
+                this.logger.debug('AuthenticationService', 'TOKEN', this.user.token);
+                this.snackBar.open("Bonjour " + this.user.username, null, config);
+                this.router.navigateByUrl("/");
             },
             (err) => {
-                this.logger.error('Authentication failed', err);
+                this.logger.error('AuthenticationService', err);
 
                 config.extraClasses = ['pi-snackbar-warn'];
 
@@ -35,23 +48,36 @@ export class AuthenticationService {
 
     public register(username: string, password: string, email: string): void {
         this.logger.debug('AuthenticationService register', username, password, email);
-        const config = new MdSnackBarConfig();
+        const config = new MatSnackBarConfig();
 
-        this.rest.post('/api/users', { login: username, password: password, email: email}).subscribe(
+        this.http.post('/api/users', { login: username, password: password, email: email}).subscribe(
             (data) => {
 
-                this.logger.error("Authenticationservice", "register success", data);
-                this.router.navigateByUrl("/");
+                this.logger.debug("AuthenticationService", "Success to register a new user", data);
+                this.router.navigateByUrl("home");
             },
             (err) => {
-
-                this.logger.error("Authenticationservice", "bad login", err);
-                if (err.status === 400) {
-                    config.extraClasses = ['pi-snackbar-warn'];
-                    this.snackBar.open("Ce login existe déjà !", null, config);
-                }
+                this.logger.error("AuthenticationService", "Une erreur à eu lieu lors de l'inscription", err);
+                config.extraClasses = ['pi-snackbar-warn'];
+                this.snackBar.open("Une erreur à eu lieu lors de l'inscription !", null, config);
 
             }
         );
+    }
+
+    public isAuthenticated(): boolean {
+        return this.user !== null;
+    }
+
+    public hasRole(role: string): boolean {
+        if ( !this.isAuthenticated()) {
+            return false;
+        }
+
+        return this.user.hasRole(role);
+    }
+
+    public getUser(): User {
+        return this.user;
     }
 }

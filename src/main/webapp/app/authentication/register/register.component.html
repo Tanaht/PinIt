@@ -1,25 +1,25 @@
 <form class="login-form" [formGroup]="loginForm" (ngSubmit)="register()" novalidate>
-    <md-card class="mat-card" fxFlex="0 1 auto">
-        <md-card-title class="mat-card-title">
+    <mat-card class="mat-card" fxFlex="0 1 auto">
+        <mat-card-title class="mat-card-title">
             Connexion
-        </md-card-title>
-        <md-card-content  fxLayout="column">
-            <md-form-field>
-                <input mdInput type="text" placeholder="Username" formControlName="username">
-            </md-form-field>
-            <md-form-field>
-                <input mdInput type="password" placeholder="Password" formControlName="password">
-            </md-form-field>
-            <md-form-field>
-                <input mdInput type="password" placeholder="Confirm password" formControlName="passwordConfirm">
-            </md-form-field>
-            <md-form-field>
-                <input mdInput type="text" placeholder="email" formControlName="email">
-            </md-form-field>
-        </md-card-content>
-        <md-card-actions fxLayout="row" fxLayoutALign="start stretch" fxLayoutWrap>
+        </mat-card-title>
+        <mat-card-content  fxLayout="column">
+            <mat-form-field>
+                <input matInput type="text" placeholder="Username" formControlName="username">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="password" placeholder="Password" formControlName="password">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="password" placeholder="Confirm password" formControlName="passwordConfirm">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="text" placeholder="email" formControlName="email">
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions fxLayout="row" fxLayoutALign="start stretch" fxLayoutWrap>
             <span fxFlex="1 1 auto"></span>
-            <button type="submit" md-raised-button color="accent" [disabled]="loginForm.invalid">S'enregistré</button>
-        </md-card-actions>
-    </md-card>
+            <button type="submit" mat-raised-button color="accent" [disabled]="loginForm.invalid">S'enregistré</button>
+        </mat-card-actions>
+    </mat-card>
 </form>

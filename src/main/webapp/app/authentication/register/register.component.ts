@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {User} from '../user';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../authentication.service';
 import {LoggerService} from '../../logger/logger.service';
@@ -7,13 +6,11 @@ import {LoggerService} from '../../logger/logger.service';
 @Component({
     selector: 'register',
     templateUrl: './register.component.html',
-    styles: ['md-card { margin-top: 40px; }']
+    styleUrls: ['../../router-outlet-component-layout.css'],
 })
 export class RegisterComponent {
-    private authenticated: User;
     loginForm: FormGroup;
     constructor(private auth: AuthenticationService, private fb: FormBuilder, private logger: LoggerService) {
-        this.authenticated = new User();
         this.createForm();
     }
 
