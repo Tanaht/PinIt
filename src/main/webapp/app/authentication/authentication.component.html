@@ -2,7 +2,7 @@
     <mat-icon>account_circle</mat-icon>
 </button>
 <mat-menu #authenticationMenu="matMenu">
-    <button mat-menu-item routerLink="logout" *ngIf="auth.isAuthenticated()">
+    <button mat-menu-item routerLink="logout" *ngIf="false == true">
         <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon>
         <span>Déconnexion</span>
     </button>
@@ -10,7 +10,7 @@
         <mat-icon fontSet="fa" fontIcon="fa-sign-in"></mat-icon>
         <span>Connexion</span>
     </button>
-    <button mat-menu-item routerLink="register" *ngIf="!auth.isAuthenticated()">
+    <button  mat-menu-item routerLink="register" *ngIf="false == true">
         <mat-icon fontSet="fa" fontIcon="fa-user-plus"></mat-icon>
         <span>Inscription</span>
     </button>
