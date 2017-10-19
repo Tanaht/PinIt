@@ -50,11 +50,20 @@ export class AuthenticationService {
         this.logger.debug('AuthenticationService register', username, password, email);
         const config = new MatSnackBarConfig();
 
-        this.http.post('/api/users', { login: username, password: password, email: email}).subscribe(
-            (data) => {
+        this.http.post('/api/users', { login: username, password: password, email: email}).map(function(res) {
 
-                this.logger.debug("AuthenticationService", "Success to register a new user", data);
-                this.router.navigateByUrl("home");
+            return new User(res.json().id, res.json().login, res.json().authorities.map(function(authority) {
+                return new Authority(authority.authority);
+            }), res.headers.get('token'), res.json().email);
+
+        }).subscribe(
+            (user) => {
+
+                this.user = user;
+
+                this.logger.debug('AuthenticationService', 'TOKEN', this.user.token);
+                this.snackBar.open("Bienvenue sur PinIt App " + this.user.username, null, config);
+                this.router.navigateByUrl("/");
             },
             (err) => {
                 this.logger.error("AuthenticationService", "Une erreur à eu lieu lors de l'inscription", err);
