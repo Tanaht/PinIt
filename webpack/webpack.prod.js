@@ -16,7 +16,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     // devtool: 'source-map',
     entry: {
         polyfills: './src/main/webapp/app/polyfills',
-        global: './src/main/webapp/content/css/global.css'
+        global: './src/main/webapp/content/css/global.css',
+        main: './src/main/webapp/app/app.main'
     },
     output: {
         path: utils.root('target/www'),
@@ -34,8 +35,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                     },
                 },
                 { loader: 'angular2-template-loader' }
-            ],
-            exclude: ['node_modules/generator-jhipster']
+            ]
         },
         {
             test: /\.css$/,
