@@ -89,4 +89,8 @@ export class AuthenticationService {
     public getUser(): User {
         return this.user;
     }
+
+    public logout(): void {
+        this.user = null;
+    }
 }
