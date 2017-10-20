@@ -6,7 +6,7 @@ if (module['hot']) {
     module['hot'].accept();
 }
 
-enableProdMode();
+// enableProdMode();
 
 platformBrowserDynamic().bootstrapModule(AppModule)
 .then((success) => console.log(`Application started`))

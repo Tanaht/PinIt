@@ -2,7 +2,7 @@
     <mat-icon>account_circle</mat-icon>
 </button>
 <mat-menu #authenticationMenu="matMenu">
-    <button mat-menu-item routerLink="logout" *ngIf="false == true">
+    <button mat-menu-item routerLink="logout" *ngIf="auth.isAuthenticated()">
         <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon>
         <span>Déconnexion</span>
     </button>
