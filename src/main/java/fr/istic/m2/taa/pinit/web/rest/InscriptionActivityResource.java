@@ -1,6 +1,5 @@
 package fr.istic.m2.taa.pinit.web.rest;
 
-import fr.istic.m2.taa.pinit.config.security.SecurityUtils;
 import fr.istic.m2.taa.pinit.domain.Activity;
 import fr.istic.m2.taa.pinit.domain.Authority;
 import fr.istic.m2.taa.pinit.domain.InscriptionActivity;
@@ -10,6 +9,7 @@ import fr.istic.m2.taa.pinit.repository.InscriptionActivityRepository;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.service.ActivityService;
 import fr.istic.m2.taa.pinit.service.InscriptionActivityService;
+import fr.istic.m2.taa.pinit.service.SecurityUtilsService;
 import fr.istic.m2.taa.pinit.service.UserService;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadActivityId;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadInscriptionActivityId;
@@ -43,16 +43,18 @@ public class InscriptionActivityResource {
     private UserRepository userRepository;
     private UserService userService;
 
+    private SecurityUtilsService securityUtilsService;
 
-    public InscriptionActivityResource(InscriptionActivityRepository inscriptionActivityRepository, InscriptionActivityService inscriptionActivityService, ActivityRepository activityRepository, ActivityService activityService, UserRepository userRepository, UserService userService) {
+
+    public InscriptionActivityResource(InscriptionActivityRepository inscriptionActivityRepository, InscriptionActivityService inscriptionActivityService, ActivityRepository activityRepository, ActivityService activityService, UserRepository userRepository, UserService userService, SecurityUtilsService securityUtilsService) {
         this.inscriptionActivityRepository = inscriptionActivityRepository;
         this.inscriptionActivityService = inscriptionActivityService;
         this.activityRepository = activityRepository;
         this.activityService = activityService;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.securityUtilsService = securityUtilsService;
     }
-
 
     @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.GET)
     @Secured(Authority.USER)
@@ -63,8 +65,8 @@ public class InscriptionActivityResource {
             throw new BadUserId(userId);
         }
 
-        long actualUser = SecurityUtils.getCurrentUserLoginId();
-        if (actualUser != userId && !SecurityUtils.isCurrentUserInRole(Authority.ADMIN)){
+        long actualUser = securityUtilsService.getCurrentUserLoginId();
+        if (actualUser != userId && !securityUtilsService.isCurrentUserInRole(Authority.ADMIN)){
             throw new NotAuthorized("User not authorized to get inscriptionActivity of another user");
         }
         return inscriptionActivityRepository.findAllByUser_Id(userId);
@@ -79,8 +81,8 @@ public class InscriptionActivityResource {
             throw new BadUserId(ins.getUserId());
         }
 
-        long actualUser = SecurityUtils.getCurrentUserLoginId();
-        if (actualUser != ins.getUserId() && !SecurityUtils.isCurrentUserInRole(Authority.ADMIN)){
+        long actualUser = securityUtilsService.getCurrentUserLoginId();
+        if (actualUser != ins.getUserId() && !securityUtilsService.isCurrentUserInRole(Authority.ADMIN)){
             throw new NotAuthorized("User not authorized to edit inscriptionActivity of another user");
         }
 
