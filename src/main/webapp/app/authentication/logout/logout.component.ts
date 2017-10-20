@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, AfterViewInit, DoCheck, AfterContentInit} from '@angular/core';
 import {AuthenticationService} from '../authentication.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-logout',
   template: '',
   styles: []
 })
-export class LogoutComponent implements OnInit {
+export class LogoutComponent {
 
-  constructor(private auth: AuthenticationService) { }
-
-  ngOnInit() {
-    throw new Error('Method Not Implemented');
+  constructor(private auth: AuthenticationService, private router: Router) {
+      this.auth.logout();
+      this.router.navigateByUrl('/');
   }
 
 }
