@@ -1,0 +1,21 @@
+<button mat-icon-button [matMenuTriggerFor]="authenticationMenu">
+    <mat-icon>account_circle</mat-icon>
+</button>
+<mat-menu #authenticationMenu="matMenu">
+    <button mat-menu-item routerLink="logout" *ngIf="false == true">
+        <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon>
+        <span>Déconnexion</span>
+    </button>
+    <button mat-menu-item routerLink="login" *ngIf="!auth.isAuthenticated()">
+        <mat-icon fontSet="fa" fontIcon="fa-sign-in"></mat-icon>
+        <span>Connexion</span>
+    </button>
+    <button  mat-menu-item routerLink="register" *ngIf="!auth.isAuthenticated()">
+        <mat-icon fontSet="fa" fontIcon="fa-user-plus"></mat-icon>
+        <span>Inscription</span>
+    </button>
+    <!--<button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Paramètres</span>
+    </button>-->
+</mat-menu>

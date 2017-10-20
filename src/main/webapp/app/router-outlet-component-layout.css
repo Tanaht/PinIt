@@ -1,0 +1,10 @@
+/* This CSS styles has to be linked to all router components */
+:host {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-content: stretch;
+    align-items: center;
+}
