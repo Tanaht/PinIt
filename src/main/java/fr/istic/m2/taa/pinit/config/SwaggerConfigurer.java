@@ -16,8 +16,8 @@ public class SwaggerConfigurer {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("fr.istic.m2.taa.pinit.web.rest"))
+                .paths(PathSelectors.ant("/api/*"))
                 .build();
     }
 }
