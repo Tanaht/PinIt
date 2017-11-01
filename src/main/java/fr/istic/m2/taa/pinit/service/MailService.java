@@ -9,7 +9,7 @@ import java.util.Properties;
 
 @Service
 public class MailService {
-    public static void main(String[] arg){
+    public static void main(String[] arg) throws Exception{
 
         String dest = "charp.antoine@gmail.com";
 
@@ -17,7 +17,7 @@ public class MailService {
 
     }
 
-    public boolean sendEmail(String to, String object, String text){
+    public void sendEmail(String to, String object, String text) throws MessagingException {
         String from = "pinitappli@gmail.com";
         String password = "pinitmdp";
 
@@ -35,18 +35,13 @@ public class MailService {
                         return new PasswordAuthentication(from,password);
                     }
                 });
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(to));
-            message.setSubject(object);
-            message.setText(text);
-            Transport.send(message);
-            return true;
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return false;
-        }
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(from));
+        message.setRecipients(Message.RecipientType.TO,
+            InternetAddress.parse(to));
+        message.setSubject(object);
+        message.setText(text);
+        Transport.send(message);
+
     }
 }
