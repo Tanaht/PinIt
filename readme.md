@@ -90,6 +90,8 @@ class Authority {
 
 ###API
 
+Documentation de l'api : http://localhost:8080/swagger-ui.html
+
 `POST /api/authenticate/login`: Permet la connexion d'un utilisateur.
 
 `GET /api/authenticate/logout` Permet la déconnexion d'un utilisateur.
