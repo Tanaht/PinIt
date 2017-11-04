@@ -1,17 +1,24 @@
-package fr.istic.m2.taa.pinit.config.security;
+package fr.istic.m2.taa.pinit.service;
 
 import fr.istic.m2.taa.pinit.domain.Authority;
+import fr.istic.m2.taa.pinit.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
-/**
- * Utility class for Spring Security.
- */
-public final class SecurityUtils {
+@Service
+public class SecurityUtilsService {
 
-    private SecurityUtils() {
+    private UserRepository userRepository;
+
+    public SecurityUtilsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public long getCurrentUserLoginId(){
+        return userRepository.findOneByLogin(getCurrentUserLogin()).get().getId();
     }
 
     /**
@@ -19,7 +26,7 @@ public final class SecurityUtils {
      *
      * @return the login of the current user
      */
-    public static String getCurrentUserLogin() {
+    public String getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         String userName = null;
@@ -31,6 +38,7 @@ public final class SecurityUtils {
                 userName = (String) authentication.getPrincipal();
             }
         }
+
         return userName;
     }
 
@@ -39,7 +47,7 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user
      */
-    public static String getCurrentUserJWT() {
+    public String getCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         if (authentication != null && authentication.getCredentials() instanceof String) {
@@ -53,12 +61,12 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise
      */
-    public static boolean isAuthenticated() {
+    public boolean isAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         if (authentication != null) {
             return authentication.getAuthorities().stream()
-                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Authority.ANONYMOUS));
+                    .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Authority.ANONYMOUS));
         }
         return false;
     }
@@ -71,13 +79,14 @@ public final class SecurityUtils {
      * @param authority the authority to check
      * @return true if the current user has the authority, false otherwise
      */
-    public static boolean isCurrentUserInRole(String authority) {
+    public boolean isCurrentUserInRole(String authority) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         if (authentication != null) {
             return authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority));
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority));
         }
         return false;
     }
+
 }

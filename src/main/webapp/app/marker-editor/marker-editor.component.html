@@ -3,7 +3,7 @@
   <mat-dialog-content>
     <p>{{ marker.address }}</p>
     <mat-form-field>
-      <mat-select placeholder="Activité" [(ngModel)]="marker.activity" name="activity" required>
+      <mat-select  [compareWith]="byID" placeholder="Activité" [(ngModel)]="marker.activity" name="activity" required>
         <mat-option *ngFor="let activity of activities" [value]="activity">
           {{ activity.nameActivity }}
         </mat-option>
