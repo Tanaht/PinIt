@@ -25,6 +25,9 @@
         <button type="button" mat-icon-button color="primary" (click)="zoomOn(marker)">
           <mat-icon >location_on</mat-icon>
         </button>
+        <button type="button" mat-icon-button color="warn" (click)="delete(marker)">
+          <mat-icon >delete</mat-icon>
+        </button>
         <h4 mat-line>{{ marker.activity.nameActivity }}</h4>
         <span mat-line>{{ marker.address }}</span>
       </mat-list-item>

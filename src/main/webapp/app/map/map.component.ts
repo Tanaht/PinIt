@@ -71,6 +71,30 @@ export class MapComponent implements OnInit {
       });
   }
 
+  public delete(marker: ActivityMarker): void {
+      this.logger.info("MapComponent#delete()", "Remove Activity " + marker.id + "at: " + marker.lat + ', ' + marker.long);
+
+      // TODO: refactor snackbar call (mutualize call to it)
+      const config = new MatSnackBarConfig();
+      config.verticalPosition = 'bottom';
+      config.horizontalPosition = 'right';
+      config.duration = 2000;
+
+      this.rest.delete("/api/inscriptions/" + marker.id).subscribe((result) => {
+          const idx: number = this.markers.indexOf(marker);
+          if (idx !== -1) {
+              this.markers.splice(idx, 1);
+          } else {
+              this.logger.debug("MapComponent#delete()", "Unable to find Marker in Markers, that should not happen.");
+          }
+      }, (error) => {
+          this.logger.warn("MapComponent#delete()", "unable to remove an activityMarker");
+
+          config.extraClasses = ['pi-snackbar-warn'];
+          this.snackbar.open("Failed to remove marker, perhaps the server is down ?", null, config);
+      });
+  }
+
   public addActivity($event: EventEmitter<MouseEvent>): void {
       this.logger.info("MapComponent#AddActivity()", "Add a new Activity at: " + $event['coords'].lat + ', ' + $event['coords'].lng);
 
@@ -100,7 +124,7 @@ export class MapComponent implements OnInit {
                       this.markers.push(marker);
                   }, (error) => {
                       config.extraClasses = ['pi-snackbar-warn'];
-                      this.snackbar.open("Failed to add new marker, perhaps the server is down ?");
+                      this.snackbar.open("Failed to add new marker, perhaps the server is down ?", null, config);
                   });
                   break;
           }
