@@ -1,8 +1,7 @@
-import {Component, Inject, OnInit, ViewChild, ViewRef} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef, MatInput} from '@angular/material';
 import {LoggerService} from '../logger/logger.service';
 import {ActivityMarker} from '../model/activity-marker';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Intent} from '../model/Intent';
 import {ActivityProviderService} from '../services/activity-provider/activity-provider.service';
 import {Activity} from '../model/activity';
@@ -13,37 +12,60 @@ import {Activity} from '../model/activity';
   styles: []
 })
 export class MarkerEditorComponent implements OnInit {
-
     activities: Array<Activity>;
-
     marker: ActivityMarker;
-  constructor(
-      public dialogRef: MatDialogRef<MarkerEditorComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: ActivityMarker,
-      private logger: LoggerService,
-      private activityProvider: ActivityProviderService) {
+    @ViewChild("addressSearch") addressSearchElement: ElementRef;
 
-      this.marker = data;
-  }
+    private autocomplete: google.maps.places.Autocomplete;
 
-  byID(item1: Activity, item2: Activity) {
+    constructor(
+        public dialogRef: MatDialogRef<MarkerEditorComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: ActivityMarker,
+        private logger: LoggerService,
+        private activityProvider: ActivityProviderService) {
+
+        this.marker = data;
+    }
+
+    byID(item1: Activity, item2: Activity) {
         return item1.id === item2.id;
-  }
+    }
 
-  cancel(): void {
-      this.dialogRef.close(Intent.Dismiss);
-  }
+    cancel(): void {
+        this.dialogRef.close(Intent.Dismiss);
+    }
 
-  updateMarker(): void {
-      // this.marker.activity = ...
-      this.dialogRef.close(Intent.Close);
-  }
+    updateMarker(): void {
+        this.dialogRef.close(Intent.Close);
+    }
 
-  ngOnInit() {
-      this.activityProvider.getActivities().subscribe((activities: Array<Activity>) => {
-          this.logger.debug("MarkerEditorComponent#ngOnInit", "Successfully retrieved activities");
-          this.activities = activities;
-      });
-  }
+    ngOnInit() {
+        this.activityProvider.getActivities().subscribe((activities: Array<Activity>) => {
+            this.logger.debug("MarkerEditorComponent#ngOnInit", "Successfully retrieved activities");
+            this.activities = activities;
+        });
+
+        this.marker.updateAddress().subscribe((res) => {
+            this.logger.debug("SUBSCRIBRE UPDATE ADDRESS", res, this.marker);
+            this.autocomplete = new google.maps.places.Autocomplete(this.addressSearchElement.nativeElement, {
+                types: ['address'],
+                componentRestrictions: {country: 'fr'}
+            });
+
+            const self = this;
+            this.autocomplete.addListener("place_changed", function() {
+                const result = self.autocomplete.getPlace();
+
+                if (result.formatted_address !== undefined) {
+                    self.marker.address = result.formatted_address;
+                    self.marker.lat = result.geometry.location.lat();
+                    self.marker.long = result.geometry.location.lng();
+
+                } else {
+                    self.logger.debug("Undefined");
+                }
+            });
+        });
+    }
 
 }

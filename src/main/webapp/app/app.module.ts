@@ -21,7 +21,7 @@ import {HttpModule} from '@angular/http';
 import {FormsModule, NgModel, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import { MapComponent } from './map/map.component';
-import {AgmCoreModule} from '@agm/core';
+import {AgmCoreModule, MapsAPILoader, NoOpMapsAPILoader} from '@agm/core';
 import { HomeComponent } from './home/home.component';
 import {AuthenticationService} from './authentication/authentication.service';
 import {HttpClientModule} from '@angular/common/http';
@@ -58,9 +58,7 @@ import {ActivityProviderService} from './services/activity-provider/activity-pro
         MatButtonModule,
         FormsModule,
 
-        AgmCoreModule.forRoot({
-            apiKey: AppModule.mapApiKey
-        }),
+        AgmCoreModule,
 
         FlexLayoutModule,
 
@@ -68,7 +66,7 @@ import {ActivityProviderService} from './services/activity-provider/activity-pro
     ],
     entryComponents: [MarkerEditorComponent],
     providers: [
-        MatIconRegistry, RestService, LoggerService, ActivityProviderService
+        MatIconRegistry, RestService, LoggerService, ActivityProviderService, [MapsAPILoader, { provide: MapsAPILoader, useClass: NoOpMapsAPILoader}]
     ],
     bootstrap: [AppComponent]
 })
@@ -78,10 +76,8 @@ export class AppModule {
 
     constructor(iconReg: MatIconRegistry, auth: AuthenticationService, injector: Injector) {
         AppModule.mapApiKey = 'AIzaSyCQaM6Mw4t5EbZVhbab3mBuWWROC_pcNT0';
-
         AppModule.injector = injector;
         iconReg.registerFontClassAlias('fontawesome', 'fa');
-
         // Generate values for dev purpose
         if ( isDevMode()) {
             auth.authenticate('user', '123456');

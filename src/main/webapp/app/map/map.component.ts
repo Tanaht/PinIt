@@ -61,14 +61,44 @@ export class MapComponent implements OnInit {
       });
   }
 
-  public edit(marker: ActivityMarker): void {
+  public editMarker(marker: ActivityMarker, newLat?: number, newLong?: number): void {
+
+      const markerClone: ActivityMarker = marker;
+
+      if (newLat !== undefined && newLong !== undefined) {
+         this.logger.debug("MapComponent#editMarker", "Perform update of LatLng values");
+         marker.lat = newLat;
+         marker.long = newLong;
+      }
+
+      // TODO: refactor snackbar call (mutualize call to it)
+      const config = new MatSnackBarConfig();
+      config.verticalPosition = 'bottom';
+      config.horizontalPosition = 'right';
+      config.duration = 2000;
+
       this.dialog.open(MarkerEditorComponent, {
-          data: marker
+          data: marker,
+          width: "500px"
       }).afterClosed().subscribe((intent: Intent) => {
           if (intent === Intent.Close) {
-                // TODO: this.rest.update("/users/" + this.auth.getUser().id + "/inscriptions/" + marker.id, marker);
+              this.rest.update("/api/inscriptions/" + marker.id, {
+                  activityId: marker.activity.id,
+                  coordonne: {
+                      latitude: marker.lat,
+                      longitude: marker.long,
+                  }
+              }).subscribe( null, (error) => {
+                  marker = markerClone;
+                  config.extraClasses = ['pi-snackbar-warn'];
+                  this.snackbar.open("Failed to update marker, perhaps the server is down ?", null, config);
+              });
           }
       });
+  }
+
+  public editMarkerCoordinate($event: EventEmitter<MouseEvent>, marker: ActivityMarker): void {
+      this.editMarker(marker, $event['coords'].lat, $event['coords'].lng);
   }
 
   public delete(marker: ActivityMarker): void {
@@ -106,7 +136,8 @@ export class MapComponent implements OnInit {
       config.duration = 2000;
 
       const dialogRef = this.dialog.open(MarkerEditorComponent, {
-          data: marker
+          data: marker,
+          width: "500px"
       });
       dialogRef.afterClosed().subscribe((intent: Intent) => {
           switch (intent) {

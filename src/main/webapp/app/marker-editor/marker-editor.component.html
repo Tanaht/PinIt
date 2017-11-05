@@ -1,7 +1,9 @@
 <form class="marker-form" (ngSubmit)="updateMarker()" fxFlex="0 1 auto" #markerForm="ngForm" novalidate>
   <h2 mat-dialog-title>Détails du lieu</h2>
-  <mat-dialog-content>
-    <p>{{ marker.address }}</p>
+  <mat-dialog-content fxLayout="column">
+    <mat-form-field>
+      <input matInput placeholder="Adresse" [value]="marker.address" #addressSearch>
+    </mat-form-field>
     <mat-form-field>
       <mat-select  [compareWith]="byID" placeholder="Activité" [(ngModel)]="marker.activity" name="activity" required>
         <mat-option *ngFor="let activity of activities" [value]="activity">
