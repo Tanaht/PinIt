@@ -29,4 +29,5 @@ public class TestResourceMeteo {
 
         return resApi;
     }
+
 }

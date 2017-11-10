@@ -2,7 +2,7 @@ package fr.istic.m2.taa.pinit.domain.meteo;
 
 public class Cloud {
 
-    private String all;
+    private int all;
 
     public Cloud() {
 
@@ -16,11 +16,11 @@ public class Cloud {
             '}';
     }
 
-    public String getAll() {
+    public int getAll() {
         return all;
     }
 
-    public void setAll(String all) {
+    public void setAll(int all) {
         this.all = all;
     }
 }

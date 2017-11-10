@@ -10,10 +10,19 @@ public class Meteo {
     private List<Weather> weather;
     private Cloud clouds;
     private Wind wind;
+    private Rain rain;
     private Sys sys;
     private String dt_txt;
     public Meteo(){
 
+    }
+
+    public double getRain() {
+        return rain.getRain();
+    }
+
+    public void setRain(Rain rain) {
+        this.rain = rain;
     }
 
     @Override

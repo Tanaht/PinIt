@@ -18,6 +18,7 @@ public class ScheduledTasks {
     //@Scheduled(fixedRate = 1000)
     @Scheduled(cron = "0 0 18 * * FRI")//tous les jeudi à 18h
     public void reportCurrentTime() {
+
         log.info("The time is now {}", dateFormat.format(new Date()));
     }
 }
