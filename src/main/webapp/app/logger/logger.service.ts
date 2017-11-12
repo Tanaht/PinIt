@@ -4,9 +4,6 @@ import {Injectable, isDevMode} from '@angular/core';
 export class LoggerService {
 
   public info(what: string, ...messages: any[]): void {
-      if ( !isDevMode()) {
-          return;
-      }
 
       console.info("[" + what + "]", messages);
   }

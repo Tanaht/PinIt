@@ -1,5 +1,4 @@
-import {Injectable, Injector} from '@angular/core';
-import {RestService} from '../services/rest/rest.service';
+import {Injectable} from '@angular/core';
 import {LoggerService} from '../logger/logger.service';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {Router} from '@angular/router';
@@ -12,7 +11,13 @@ export class AuthenticationService {
     private user: User;
 
     constructor(private router: Router, private snackBar: MatSnackBar, private logger: LoggerService, private http: Http) {
-        this.user = null;
+        const optionalUser: User = JSON.parse(localStorage.getItem('user'));
+
+        if (optionalUser != null) {
+            this.user = optionalUser;
+        } else {
+            this.user = null;
+        }
     }
 
     public authenticate(username: string, password: string): void {
@@ -34,11 +39,15 @@ export class AuthenticationService {
 
                 this.logger.debug('AuthenticationService', 'TOKEN', this.user.token);
                 this.snackBar.open("Bonjour " + this.user.username, null, config);
-                this.router.navigateByUrl("/");
+
+                localStorage.setItem('user', JSON.stringify(this.user));
+
+                this.router.navigateByUrl("/home");
             },
             (err) => {
-                this.logger.error('AuthenticationService', err);
+                localStorage.removeItem('user');
 
+                this.logger.error('AuthenticationService', err);
                 config.extraClasses = ['pi-snackbar-warn'];
 
                 this.snackBar.open("Echec de la connexion, merci de réessayer !", null, config);
@@ -60,12 +69,14 @@ export class AuthenticationService {
             (user) => {
 
                 this.user = user;
+                localStorage.setItem('user', JSON.stringify(this.user));
 
                 this.logger.debug('AuthenticationService', 'TOKEN', this.user.token);
                 this.snackBar.open("Bienvenue sur PinIt App " + this.user.username, null, config);
-                this.router.navigateByUrl("/");
+                this.router.navigateByUrl("/home");
             },
             (err) => {
+                localStorage.removeItem('user');
                 this.logger.error("AuthenticationService", "Une erreur à eu lieu lors de l'inscription", err);
                 config.extraClasses = ['pi-snackbar-warn'];
                 this.snackBar.open("Une erreur à eu lieu lors de l'inscription !", null, config);
@@ -92,5 +103,6 @@ export class AuthenticationService {
 
     public logout(): void {
         this.user = null;
+        localStorage.removeItem('user');
     }
 }
