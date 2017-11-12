@@ -6,8 +6,8 @@ INSERT INTO authority values('ROLE_USER');
 INSERT INTO authority values('ROLE_ANONYMOUS');
 
 -- user
-INSERT INTO user VALUES (1, 'charp.antoine+pinit-user@gmail.com', 'user', '$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.'); #PWD = 123456
-INSERT INTO user VALUES (2, 'charp.antoine+pinit-admin@gmail.com', 'admin', '$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.'); #PWD = 123456
+INSERT INTO user VALUES (1, 'loic.beaulieu@etudiant.univ-rennes1.fr', 'user', '$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.'); #PWD = 123456
+INSERT INTO user VALUES (2, 'loic.beaulieu@etudiant.univ-rennes1.fr', 'admin', '$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.'); #PWD = 123456
 
 -- Activity
 -- rain max, rain min, snow, temp, wind
