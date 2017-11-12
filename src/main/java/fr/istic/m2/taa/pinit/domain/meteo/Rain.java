@@ -8,6 +8,10 @@ public class Rain {
     @JsonProperty("3h")
     private double rain;
 
+    public Rain(){
+
+    }
+
     public Rain(double rain) {
         this.rain = rain;
     }

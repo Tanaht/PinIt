@@ -2,11 +2,14 @@ package fr.istic.m2.taa.pinit.domain.meteo;
 
 public class Cloud {
 
-    private int all;
+    private double all;
 
     public Cloud() {
 
+    }
 
+    public Cloud(double all) {
+        this.all = all;
     }
 
     @Override
@@ -16,11 +19,11 @@ public class Cloud {
             '}';
     }
 
-    public int getAll() {
+    public double getAll() {
         return all;
     }
 
-    public void setAll(int all) {
+    public void setAll(double all) {
         this.all = all;
     }
 }

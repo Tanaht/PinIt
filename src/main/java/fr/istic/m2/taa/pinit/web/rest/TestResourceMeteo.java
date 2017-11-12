@@ -22,7 +22,6 @@ public class TestResourceMeteo {
     }
 
     @GetMapping("/meteo")
-    @Secured("ROLE_USER")
     public ListMeteo getMeteo() {
 
         ListMeteo resApi = meteoService.getMeteo(48.117266,-1.6777925999999752);

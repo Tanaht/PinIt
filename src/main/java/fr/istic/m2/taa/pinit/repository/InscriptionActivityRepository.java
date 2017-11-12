@@ -10,10 +10,11 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface InscriptionActivityRepository extends JpaRepository<InscriptionActivity, String> {
+public interface InscriptionActivityRepository extends JpaRepository<InscriptionActivity, Long> {
+
+    List<InscriptionActivity> findAll();
 
     List<InscriptionActivity> findAllByUser_Login(String login);
-
 
     List<InscriptionActivity> findAllByUser_Id(long userId);
 
