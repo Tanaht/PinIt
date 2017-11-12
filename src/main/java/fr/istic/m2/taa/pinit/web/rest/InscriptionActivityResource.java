@@ -7,10 +7,7 @@ import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.ActivityRepository;
 import fr.istic.m2.taa.pinit.repository.InscriptionActivityRepository;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
-import fr.istic.m2.taa.pinit.service.ActivityService;
-import fr.istic.m2.taa.pinit.service.InscriptionActivityService;
 import fr.istic.m2.taa.pinit.service.SecurityUtilsService;
-import fr.istic.m2.taa.pinit.service.UserService;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadActivityId;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadInscriptionActivityId;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadUserId;
@@ -19,14 +16,15 @@ import fr.istic.m2.taa.pinit.web.rest.model.InscriptionActivityRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -35,24 +33,21 @@ public class InscriptionActivityResource {
     private final Logger log = LoggerFactory.getLogger(InscriptionActivityResource.class);
 
     private InscriptionActivityRepository inscriptionActivityRepository;
-    private InscriptionActivityService inscriptionActivityService;
 
     private ActivityRepository activityRepository;
-    private ActivityService activityService;
 
     private UserRepository userRepository;
-    private UserService userService;
 
     private SecurityUtilsService securityUtilsService;
 
 
-    public InscriptionActivityResource(InscriptionActivityRepository inscriptionActivityRepository, InscriptionActivityService inscriptionActivityService, ActivityRepository activityRepository, ActivityService activityService, UserRepository userRepository, UserService userService, SecurityUtilsService securityUtilsService) {
+    public InscriptionActivityResource(InscriptionActivityRepository inscriptionActivityRepository, ActivityRepository activityRepository, UserRepository userRepository, SecurityUtilsService securityUtilsService) {
         this.inscriptionActivityRepository = inscriptionActivityRepository;
-        this.inscriptionActivityService = inscriptionActivityService;
+
         this.activityRepository = activityRepository;
-        this.activityService = activityService;
+
         this.userRepository = userRepository;
-        this.userService = userService;
+
         this.securityUtilsService = securityUtilsService;
     }
 
@@ -74,20 +69,23 @@ public class InscriptionActivityResource {
 
     @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.POST)
     @Secured(Authority.USER)
-    public ResponseEntity addInscriptionToUser(@Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId, NotAuthorized {
-        Optional<User> potentialUser = userRepository.findUserById(ins.getUserId());
+    public InscriptionActivity addInscriptionToUser(@PathVariable("userId") long userId, @Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId, NotAuthorized {
+        Optional<User> potentialUser = userRepository.findUserById(userId);
 
+        //On vérifie la présence de l'utilisateur en base.
         if (!potentialUser.isPresent()){
-            throw new BadUserId(ins.getUserId());
+            throw new BadUserId(userId);
         }
 
+        //On vérifie que l'utilisateur qui accède à cette resource est légitime.
         long actualUser = securityUtilsService.getCurrentUserLoginId();
-        if (actualUser != ins.getUserId() && !securityUtilsService.isCurrentUserInRole(Authority.ADMIN)){
+        if (actualUser != userId && !securityUtilsService.isCurrentUserInRole(Authority.ADMIN)){
             throw new NotAuthorized("User not authorized to edit inscriptionActivity of another user");
         }
 
         Optional<Activity> potentialActivity = activityRepository.findById(ins.getActivityId());
 
+        // On vérifie que l'activité choisie existe.
         if (!potentialActivity.isPresent()){
             throw new BadActivityId(ins.getActivityId());
         }
@@ -99,28 +97,44 @@ public class InscriptionActivityResource {
 
         inscriptionActivityRepository.save(inscriptionActivity);
 
-        return ResponseEntity.ok().build();
+        log.debug("InscriptionActivity ID: {}", inscriptionActivity.getId());
+        return inscriptionActivity;
     }
 
     @RequestMapping(value="/inscriptions/{inscriptionId}", method = RequestMethod.DELETE)
     @Secured(Authority.USER)
-    public ResponseEntity removeInscriptionById(@PathVariable("inscriptionId") long inscriptionId) throws BadActivityId{
+    public Map<String, String> removeInscriptionById(@PathVariable("inscriptionId") long inscriptionId) throws BadActivityId, BadInscriptionActivityId, NotAuthorized {
 
-        Optional<Activity> potentialActivity = activityRepository.findById(inscriptionId);
+        Optional<InscriptionActivity> potentialInscription = inscriptionActivityRepository.findById(inscriptionId);
+
+        if (!potentialInscription.isPresent()){
+            throw new BadInscriptionActivityId(inscriptionId);
+        }
+
+        Optional<Activity> potentialActivity = activityRepository.findById(potentialInscription.get().getActivity().getId());
         if (!potentialActivity.isPresent()){
             throw new BadActivityId(inscriptionId);
         }
 
 
+        //On vérifie que l'utilisateur qui accède à cette resource est légitime.
+        long actualUser = securityUtilsService.getCurrentUserLoginId();
+        if (actualUser != potentialInscription.get().getUser().getId() && !securityUtilsService.isCurrentUserInRole(Authority.ADMIN)){
+            throw new NotAuthorized("User not authorized to edit inscriptionActivity of another user");
+        }
 
-        inscriptionActivityRepository.deleteById(inscriptionId);
 
-        return ResponseEntity.ok().build();
+        inscriptionActivityRepository.delete(potentialInscription.get());
+
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("result", "InscriptionActivity has been deleted with success");
+
+        return response;
     }
 
     @RequestMapping(value="/inscriptions/{inscriptionId}", method = RequestMethod.PUT)
     @Secured(Authority.USER)
-    public ResponseEntity editInscriptionActivity(@PathVariable("inscriptionId") long inscriptionId,@RequestBody InscriptionActivityRegister ins) throws BadActivityId, BadUserId, BadInscriptionActivityId {
+    public Map<String, String> editInscriptionActivity(@PathVariable("inscriptionId") long inscriptionId,@RequestBody InscriptionActivityRegister ins) throws BadActivityId, BadUserId, BadInscriptionActivityId {
         Optional<Activity> potentialActivity = activityRepository.findById(ins.getActivityId());
         if (!potentialActivity.isPresent()){
             throw new BadActivityId(ins.getActivityId());
@@ -137,7 +151,11 @@ public class InscriptionActivityResource {
 
         inscriptionActivityRepository.save(inscriptionActivity);
 
-        return ResponseEntity.ok().build();
+
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("result", "InscriptionActivity has been updated with success");
+
+        return response;
     }
 
 

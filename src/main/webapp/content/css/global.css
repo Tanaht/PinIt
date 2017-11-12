@@ -14,3 +14,7 @@ snack-bar-container.pi-snackbar-warn {
     background: #f44336;
     color: #fff;
 }
+
+mat-dialog-content mat-form-field {
+    width: auto!important;
+}

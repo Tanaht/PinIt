@@ -14,7 +14,7 @@ export class RestService {
     }
 
     public onSuccess(data: object): void {
-      this.logger.debug("RestService", data)
+      this.logger.debug("RestService", "Request successfully ended");
     }
 
     public onError(data: object): void {
