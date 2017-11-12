@@ -3,7 +3,6 @@ import {AppModule} from './app.module';
 import {enableProdMode} from '@angular/core';
 
 if (module['hot']) {
-    console.log(module['hot']);
     module['hot'].accept();
 }
 
