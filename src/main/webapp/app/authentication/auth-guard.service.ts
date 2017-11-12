@@ -1,17 +1,16 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
 import {LoggerService} from '../logger/logger.service';
 import {AuthenticationService} from './authentication.service';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
 
     constructor(private auth: AuthenticationService, private log: LoggerService, private snackBar: MatSnackBar) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
-
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         const config = new MatSnackBarConfig();
         config.verticalPosition = 'bottom';
         config.horizontalPosition = 'right';
@@ -27,5 +26,4 @@ export class AuthGuardService implements CanActivate {
             return false;
         }
     }
-
 }

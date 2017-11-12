@@ -1,5 +1,4 @@
 import {Injectable, isDevMode} from '@angular/core';
-import { environment } from '../../../../../environments/environment';
 
 @Injectable()
 export class LoggerService {
@@ -25,7 +24,7 @@ export class LoggerService {
   }
 
   public debug(what: string, ...messages: any[]): void {
-      if ( !environment.debug) {
+      if ( !isDevMode()) {
           return;
       }
 
