@@ -8,6 +8,8 @@ spring:
     application:
         name: 'PinIt App'
 
+    mvc.favicon.enabled: false
+
     session:
         store-type: 'none'
 

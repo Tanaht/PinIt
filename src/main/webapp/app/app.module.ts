@@ -27,6 +27,7 @@ import {AuthenticationService} from './authentication/authentication.service';
 import {HttpClientModule} from '@angular/common/http';
 import { MarkerEditorComponent } from './marker-editor/marker-editor.component';
 import {ActivityProviderService} from './services/activity-provider/activity-provider.service';
+import {AuthGuardService} from './authentication/auth-guard.service';
 
 @NgModule({
     declarations: [
@@ -66,7 +67,17 @@ import {ActivityProviderService} from './services/activity-provider/activity-pro
     ],
     entryComponents: [MarkerEditorComponent],
     providers: [
-        MatIconRegistry, RestService, LoggerService, ActivityProviderService, [MapsAPILoader, { provide: MapsAPILoader, useClass: NoOpMapsAPILoader}]
+        MatIconRegistry,
+        RestService,
+        LoggerService,
+        AuthGuardService,
+        AuthenticationService,
+        ActivityProviderService,
+        /*
+        * Here we do not want that MapsAPILoader load Google Map api
+        * because it will be loaded by an old schol <script/> element.
+        * */
+        [MapsAPILoader, { provide: MapsAPILoader, useClass: NoOpMapsAPILoader}]
     ],
     bootstrap: [AppComponent]
 })
