@@ -255,13 +255,6 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>target/${artifactId}-${version}</directory>
-							<includes>
-								<include>**</include>
-							</includes>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
-						<fileset>
 							<directory>node_modules</directory>
 							<includes>
 								<include>**</include>

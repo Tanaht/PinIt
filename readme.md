@@ -36,14 +36,40 @@ Mysql root password: 123456789
 
 `docker/pinit-env.list` Configuration to override Spring environment variable to connect to mysql datasource
 
-Before these commands, if no docker image exists run the following command:
+/!\ Before these commands, if no docker image exists run the following command:
 ```Shell
-sudo mvn dockerfile:buil -Denv=prod
+sudo mvn dockerfile:build -Denv=prod
 ```
 
 ```Shell
 sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -d mysql:latest
-sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 8080:8080 pinit:latest
+sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 8080:8080 -d pinit:latest
+```
+
+
+And if we want to expand application but with the same underlying database:
+
+<span style="color:red;">/!\ Be sure to remove automated `src/main/resources/import.sql` file in this mode.</span>
+Because it will eraise the database at each new server start.
+
+```Shell
+sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -p 50000-50050:3306 -d mysql:latest
+
+#Pin It App 1
+sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 50050-50100:8080 -d pinit:latest
+
+Pin It App 2
+sudo docker run --name pinit-app-2 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 50050-50100:8080 -d pinit:latest
+
+```
+
+With this config we can have up to 50 Pin It Application running for the same underlying database:
+```Shell
+$ sudo docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                     NAMES
+c61abb1473b1        pinit:latest        "/bin/sh -c 'exec ..."   36 seconds ago       Up 34 seconds       0.0.0.0:50051->8080/tcp   pinit-app-2
+7b64d296bdf2        pinit:latest        "/bin/sh -c 'exec ..."   About a minute ago   Up About a minute   0.0.0.0:50050->8080/tcp   pinit-app-1
+5ca328a40833        mysql:latest        "docker-entrypoint..."   3 minutes ago        Up 3 minutes        0.0.0.0:50000->3306/tcp   mysql-for-pinit
 ```
 ###Données de développements:
 
