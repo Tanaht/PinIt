@@ -7,7 +7,47 @@ Security is not the issue of this topic so passwords are stupidly simple.
 
 There may also be severall exploit like CSRF (we do no CSRF protection on forms submission).
 
-#### Tutoriels:
+Ce projet s'inspire de la configuration d'une application monolithique en JHIPSTER.
+
+Notamment au niveau de la configuration Spring et Webpack, 
+et la façon dont jhipster surcharge la configuration Spring du fichier application.yml par les variables d'environnements 
+Docker à aussi été réutilisée.
+
+#### Exigences techniques:
+
+L'application consiste en un serveur réalisée avec le framework Spring-Boot et un client web en Angular 4.
+
+- Il ne doit pas être possible, pour un utilisateur, d’accéder à (ni modifier) une information concernant un autre utilisateur
+  
+  De base les utilisateurs s'authentifient et recoivent un token, chaque token identifie un utilisateur, de ce fait lorsqu'une resource concernant un utilisateur est demandée, on vérifie que le token correspond à cet utilisateur, sauf en cas d'utilisateurs admin.
+
+- L’état de l’application doit être persistant (si on éteint puis rallume l’application, elle doit retrouver son état avant extinction)
+  
+  Ca fonctionne, mais la configuration actuelle recharge la base de donnée gràce aux script `src/main/resources/import.sql` 
+  par défaut le script sera renommé en `src/main/resources/_import.sql` pour assurer la persistence.
+  
+- Toutes les actions doivent pouvoir être réalisées depuis des points d’entrée HTTP (le corps des requêtes et des réponses doit être au format JSON)
+  
+  On peut le visualiser grâce à Swagger.
+
+- Le système doit informer différemment l’utilisateur des échecs selon que ceux-ci soient dus à une erreur de la part de l’utilisateur ou à un problème technique interne
+
+- Le serveur HTTP est scalable horizontalement (le fait de démarrer plusieurs instances en parallèle ne pose pas de problème)
+
+  Résolue avec Docker, example plus bas.
+  
+- L’API respecte les principes d’architecture REST
+
+  Les principes REST de base sont présent à savoir qu'une requète DELETE correspond à la suppression de la resource ciblé par l'url.
+
+- L’API est découvrable en lecture
+
+  Il est possible de voir l'api grâce à swagger avec l'URL /swagger-ui.html
+  
+- Dans la mesure du possible, tous les traitements doivent être réalisés de façon non bloquante, et utiliser au mieux la capacité de calcul des machines (e.g. multi-cœurs)
+
+
+#### Client Side Documentation pour les développeurs:
 
 Google MAP API Documentations: https://angular-maps.com/
 
@@ -15,12 +55,14 @@ Angular 4: https://angular.io/
 
 Angular Material: https://material.angular.io/
 
+
+// TODO: It would be great to remove this dependencies not so usefull and a little buggy.
 Flex Layout: https://github.com/angular/flex-layout/wiki/API-Documentation
 
 #### Informations:
 GOOGLE MAP API KEY: AIzaSyCQaM6Mw4t5EbZVhbab3mBuWWROC_pcNT0
 
-ISTIC COORDINATE: 48.115464, -1.638707
+ISTIC (parking) COORDINATE: 48.115464, -1.638707
 
 
 ###Docker-isation:
@@ -49,7 +91,7 @@ sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql
 
 And if we want to expand application but with the same underlying database:
 
-<span style="color:red;">/!\ Be sure to remove automated `src/main/resources/import.sql` file in this mode.</span>
+*/!\ Be sure to remove automated `src/main/resources/import.sql` file in this mode.*
 Because it will eraise the database at each new server start.
 
 ```Shell
@@ -77,6 +119,7 @@ Durant le développement un script SQL est utilisé pour hydrater la base de don
 le fichier `src/main/resources/import.sql` est exécuté lorsque la propriété de configuration Spring `spring.jpa.ddl-auto` est égale à `create` ou `create-drop`.
 
 Ce fichier SQL génère notamment deux utilisateurs de base, un utilisateur lambda et un admin:
+Finalement le role d'administrateur est inutile pour le moment, mais dans le cas d'une éventuel évolution, cette fonctionnalités et préimplémentée.
 
 ```mysql
 INSERT INTO user VALUES (1, 'charp.antoine+pinit-user@gmail.com', 'user', '$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.'); #PWD = 123456
@@ -87,6 +130,7 @@ Etant donné que les mots de passe de la base de donnée sont crypté avec l'alg
 
 * **user/123456**
 * **admin/123456**
+
 ###Gestion Sécurité:
 
 Pour créer un point d'entrée vers une resource Rest, il faut veiller aux contrôles d'accès a cette ressource.
