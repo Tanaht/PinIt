@@ -1,0 +1,50 @@
+# DataSource settings: set here your own configurations for the database
+# connection. In this example we have "netgloo_blog" as database name and
+# "root" as username and password.
+
+server:
+    port: 8080
+spring:
+    application:
+        name: 'PinIt App'
+
+    mvc.favicon.enabled: false
+
+    session:
+        store-type: 'none'
+
+    datasource: #In a Docker Container context this environments variables are override by docker environments variables
+        url: 'jdbc:mysql://mysql.istic.univ-rennes1.fr:3306/base_17004304'
+        username: 'user_17004304'
+        password: 17004304
+        testWhileIdle: true # Keep the connection alive if idle for a long time (needed in production)
+        validationQuery: 'SELECT 1'
+
+
+# Use spring.jpa.properties.* for Hibernate native properties (the prefix is
+# stripped before adding them to the entity manager)
+    jpa:
+        show-sql: true # Show or not log for each sql query
+        hibernate: # Hibernate ddl auto (create, create-drop, update)
+            ddl-auto: 'none'
+            naming-strategy: 'org.hibernate.cfg.ImprovedNamingStrategy'
+            dialect: 'org.hibernate.dialect.MySQL5Dialect' # The SQL dialect makes Hibernate generate better SQL for the chosen database
+    h2:
+        console:
+            enabled: true
+
+management:
+    security:
+        enable: true
+security:
+    basic:
+        enabled: true
+
+logging:
+    level:
+#        org.springframework.security: 'debug'
+        fr.istic.m2.taa.pinit: 'info'
+        fr.istic.m2.taa.pinit.config: 'info'
+#        org.springframework.boot.autoconfigure: 'debug'
+#        org.hibernate.SQL: 'debug'
+#        org.springframework.web: 'trace'

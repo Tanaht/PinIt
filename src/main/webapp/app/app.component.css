@@ -1,0 +1,58 @@
+:host {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #BDBDBD;
+}
+
+span.pi-nav-link {
+    margin-left: 10px;
+}
+
+mat-toolbar {
+    position: relative;
+    z-index: 10;
+}
+
+mat-sidenav {
+    width: 200px;
+}
+
+mat-sidenav-container {
+    width: 100%;
+}
+
+mat-sidenav-content {
+    position: absolute;
+    right: 0;
+    left: 0;
+}
+
+/*.pi-content {
+    display: flex;
+    box-sizing: border-box;
+    max-height: 100%;
+    flex-flow: column;
+    justify-content: space-around;
+    align-content: stretch;
+    align-items: center;
+}*/
+
+.pi-content {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+div.sidenav-wrapper {
+    overflow-y: auto;
+    flex: 1 1 auto;
+    display: flex;
+}
