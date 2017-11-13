@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import {RestService} from './rest/rest.service';
-import {LoggerService} from './logger/logger.service';
+import {AuthenticationService} from './authentication/authentication.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(public auth: AuthenticationService) {}
+}

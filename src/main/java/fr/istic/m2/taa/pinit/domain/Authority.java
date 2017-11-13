@@ -2,19 +2,15 @@ package fr.istic.m2.taa.pinit.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 public class Authority implements GrantedAuthority {
 
-    public static final String ADMIN = "ADMIN";
-    public static final String USER = "USER";
-    public static final String ANONYMOUS = "ANONYMOUS";
+    public static final String ADMIN = "ROLE_ADMIN";
+    public static final String USER = "ROLE_USER";
+    public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
 
     @Id

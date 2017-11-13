@@ -1,0 +1,25 @@
+
+<mat-card fxFlexAlign="center">
+    <mat-card-title>Bienvenue sur Pin It App.</mat-card-title>
+    <mat-card-subtitle>Un site de notification de loisirs pour le Week-End !!!</mat-card-subtitle>
+    <mat-card-content>
+        <p>Ici vous pouvez definir un certain nombres d'activités pour vos week-end,
+            l'application vous enverra <strong>un mail tout les jeudi à 18h</strong> avec les prévisions météos sur vos lieux d'intérêt.
+            De plus l'application vous conseillera en fonction de ces prévisions et de l'activités que vous souhaiteriez faire.
+        </p>
+    </mat-card-content>
+    <mat-card-actions fxLayout="row">
+        <button mat-menu-item routerLink="/logout" *ngIf="auth.isAuthenticated()">
+            <mat-icon fontSet="fa" fontIcon="fa-sign-out"></mat-icon>
+            <span>Déconnexion</span>
+        </button>
+        <button mat-menu-item routerLink="/login" *ngIf="!auth.isAuthenticated()">
+            <mat-icon fontSet="fa" fontIcon="fa-sign-in"></mat-icon>
+            <span>Connexion</span>
+        </button>
+        <button mat-menu-item routerLink="/register" *ngIf="!auth.isAuthenticated()">
+            <mat-icon fontSet="fa" fontIcon="fa-user-plus"></mat-icon>
+            <span>Inscription</span>
+        </button>
+    </mat-card-actions>
+</mat-card>

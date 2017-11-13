@@ -1,22 +1,22 @@
-<form class="login-form" [formGroup]="loginForm" (ngSubmit)="authenticate()" novalidate>
-    <md-card class="mat-card" fxFlex="0 1 auto">
-        <md-card-title class="mat-card-title">
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="authenticate()" fxFlex="0 1 auto" novalidate>
+    <mat-card class="mat-card">
+        <mat-card-title class="mat-card-title">
             Connexion
-        </md-card-title>
-        <md-card-subtitle class="mat-card-subtitle">
+        </mat-card-title>
+        <mat-card-subtitle class="mat-card-subtitle">
             Veuillez-vous connecter !
-        </md-card-subtitle>
-        <md-card-content  fxLayout="column">
-            <md-form-field>
-                <input mdInput type="text" placeholder="Username" formControlName="username">
-            </md-form-field>
-            <md-form-field>
-                <input mdInput type="password" placeholder="Password" formControlName="password">
-            </md-form-field>
-        </md-card-content>
-        <md-card-actions fxLayout="row" fxLayoutALign="start stretch" fxLayoutWrap>
+        </mat-card-subtitle>
+        <mat-card-content  fxLayout="column">
+            <mat-form-field>
+                <input matInput type="text" placeholder="Username" formControlName="username">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="password" placeholder="Password" formControlName="password">
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions fxLayout="row" fxLayoutALign="start stretch" fxLayoutWrap>
             <span fxFlex="1 1 auto"></span>
-            <button type="submit" md-raised-button color="accent" [disabled]="loginForm.invalid">Connexion</button>
-        </md-card-actions>
-    </md-card>
+            <button type="submit" mat-raised-button color="accent" [disabled]="loginForm.invalid">Connexion</button>
+        </mat-card-actions>
+    </mat-card>
 </form>

@@ -5,11 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
+@EnableScheduling
 public class PinItApplication {
 
 	public static void main(String[] args) throws UnknownHostException {
@@ -37,24 +39,5 @@ public class PinItApplication {
 				env.getProperty("server.port"),
 				env.getActiveProfiles());
 	}
-
-	/*@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-
-		return args -> {
-
-			System.out.println(ctx.getBean("welcomePageHandlerMapping").getClass().toString());
-
-			System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-			String[] beanNames = ctx.getBeanDefinitionNames();
-			Arrays.sort(beanNames);
-			for (String beanName : beanNames) {
-				System.out.println(beanName);
-			}
-
-		};
-
-	}*/
 
 }

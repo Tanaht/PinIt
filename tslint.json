@@ -1,4 +1,8 @@
 {
+    "lib": [
+        "dom",
+        "es7"
+    ],
     "rulesDirectory": [
         "node_modules/codelyzer"
     ],
@@ -28,14 +32,14 @@
         ],
         "no-arg": true,
         "no-bitwise": true,
-        "no-console": [
+        /*"no-console": [
             true,
             "debug",
             "info",
             "time",
             "timeEnd",
             "trace"
-        ],
+        ],*/
         "no-construct": true,
         "no-debugger": true,
         "no-duplicate-variable": true,
@@ -59,7 +63,7 @@
         ],
         "quotemark": [
             true,
-            "single"
+            "single|double"
         ],
         "radix": true,
         "semicolon": [
@@ -93,7 +97,7 @@
         "arrow-return-shorthand": [true],
         "import-spacing": true,
         "no-consecutive-blank-lines": [true],
-        "object-literal-shorthand": true,
+        "object-literal-shorthand": false,
         "space-before-function-paren": [true, "never"],
         "use-input-property-decorator": true,
         "use-output-property-decorator": true,
