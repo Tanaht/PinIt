@@ -6,7 +6,7 @@
 	<groupId>fr.istic.m2.taa</groupId>
 	<artifactId>pinit</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>PinIt</name>
 	<description>PinIt application</description>
@@ -114,6 +114,9 @@
 					<value>prod</value>
 				</property>
 			</activation>
+			<properties>
+				<!--<docker.image.prefix>docker-image</docker.image.prefix>-->
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -153,6 +156,24 @@
 								<configuration>
 									<arguments>run webpack:prod</arguments>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>com.spotify</groupId>
+						<artifactId>dockerfile-maven-plugin</artifactId>
+						<version>1.3.6</version>
+						<configuration>
+							<repository>${project.artifactId}</repository>
+						</configuration>
+						<executions>
+							<execution>
+								<id>default</id>
+								<phase>install</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
@@ -217,6 +238,13 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warSourceDirectory>target/www</warSourceDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
@@ -226,6 +254,13 @@
 				<version>3.0.0</version>
 				<configuration>
 					<filesets>
+						<fileset>
+							<directory>target/${artifactId}-${version}</directory>
+							<includes>
+								<include>**</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
 						<fileset>
 							<directory>node_modules</directory>
 							<includes>

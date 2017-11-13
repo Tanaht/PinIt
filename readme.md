@@ -3,6 +3,10 @@ Pin It Application
 
 ### Informations utiles:
 
+Security is not the issue of this topic so passwords are stupidly simple.
+
+There may also be severall exploit like CSRF (we do no CSRF protection on forms submission).
+
 #### Tutoriels:
 
 Google MAP API Documentations: https://angular-maps.com/
@@ -19,6 +23,28 @@ GOOGLE MAP API KEY: AIzaSyCQaM6Mw4t5EbZVhbab3mBuWWROC_pcNT0
 ISTIC COORDINATE: 48.115464, -1.638707
 
 
+###Docker-isation:
+
+// TODO: Use Docker Compose with yaml configuration file if time is not over.
+
+`docker/mysql-env.list` Configuration to run Mysql Image:
+
+Mysql database: pinit
+Mysql user: pinit
+Mysql password: 123456789
+Mysql root password: 123456789
+
+`docker/pinit-env.list` Configuration to override Spring environment variable to connect to mysql datasource
+
+Before these commands, if no docker image exists run the following command:
+```Shell
+sudo mvn dockerfile:buil -Denv=prod
+```
+
+```Shell
+sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -d mysql:latest
+sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 8080:8080 pinit:latest
+```
 ###Données de développements:
 
 Durant le développement un script SQL est utilisé pour hydrater la base de données au démarrage de Spring.

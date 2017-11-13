@@ -13,7 +13,7 @@ spring:
     session:
         store-type: 'none'
 
-    datasource:
+    datasource: #In a Docker Container context this environments variables are override by docker environments variables
         url: 'jdbc:mysql://localhost:3306/pinitBDD'
         username: 'root'
         password: ''
@@ -48,5 +48,6 @@ logging:
 #        org.springframework.security: 'debug'
         fr.istic.m2.taa.pinit: 'info'
         fr.istic.m2.taa.pinit.config: 'info'
+#        org.springframework.boot.autoconfigure: 'debug'
 #        org.hibernate.SQL: 'debug'
 #        org.springframework.web: 'trace'
