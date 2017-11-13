@@ -161,3 +161,16 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2017-11-13 19:41:18
+
+
+#Data fixtures to develop in ease
+
+-- Authority
+INSERT INTO authority values('ROLE_ADMIN');
+INSERT INTO authority values('ROLE_USER');
+INSERT INTO authority values('ROLE_ANONYMOUS');
+
+-- Activity
+-- rain max, rain min, snow, temp, wind
+INSERT INTO activity VALUES (1,'Randonnée',5,0,50,0,30,10,40,0);
+INSERT INTO activity VALUES (2,'Vélo',5,0,5,0,30,10,40,0);

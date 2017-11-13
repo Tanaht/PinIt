@@ -13,12 +13,6 @@ Notamment au niveau de la configuration Spring et Webpack,
 et la façon dont jhipster surcharge la configuration Spring du fichier application.yml par les variables d'environnements 
 Docker à aussi été réutilisée.
 
-
-Pour docker, nous avons crée une image mysql-pinit:latest en se basant sur l'image mysql de dockerhub.
-Cette image se trouve à l'url ci-dessous (396Mo), et peut être chargé grâce à: `sudo docker load -i mysql-pinit.tar`
-
-https://drive.google.com/file/d/1oWmSzkF7ONNVJB6wNFSqowbtWdvcvyEZ/view?usp=sharing
-
 #### Exigences techniques:
 
 L'application consiste en un serveur réalisée avec le framework Spring-Boot et un client web en Angular 4.
@@ -29,8 +23,8 @@ L'application consiste en un serveur réalisée avec le framework Spring-Boot et
 
 - L’état de l’application doit être persistant (si on éteint puis rallume l’application, elle doit retrouver son état avant extinction)
   
-  Ca fonctionne, mais la configuration actuelle recharge la base de donnée gràce aux script `src/main/resources/import.sql` 
-  par défaut le script sera renommé en `src/main/resources/_import.sql` pour assurer la persistence.
+  La persistence est assuré, cependant pour assurer le bon fonctionnement lors du redémmarage du serveur, 
+  le serveur ne gère plus la création des tables dans la base de données, le script pinit.sql le remplace.
   
 - Toutes les actions doivent pouvoir être réalisées depuis des points d’entrée HTTP (le corps des requêtes et des réponses doit être au format JSON)
   
@@ -93,24 +87,43 @@ sudo mvn dockerfile:build -Denv=prod
 ```
 
 ```Shell
-sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -d mysql-pinit:latest
-sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql-pinit -p 8080:8080 -d pinit:latest
+sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -d mysql:latest
+###################
+#Copy sql script into mysql-for-pinit container
+sudo docker cp pinit.sql mysql-for-pinit:pinit.sql 
+
+#login to mysql-for-pinit container bash
+sudo docker exec -it mysql-for-pinit /bin/bash
+
+#Run sql script in container password = 123456789
+mysql -u pinit --password pinit < pinit.sql 
+##################
+
+sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 8080:8080 -d pinit:latest
 ```
 
 
 And if we want to expand application but with the same underlying database:
 
-*/!\ Be sure to remove automated `src/main/resources/import.sql` file in this mode.*
-Because it will eraise the database at each new server start.
-
 ```Shell
 sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -p 50000-50050:3306 -d mysql-pinit:latest
 
-#Pin It App 1
-sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql-pinit -p 50050-50100:8080 -d pinit:latest
+###################
+#Copy sql script into mysql-for-pinit container
+sudo docker cp pinit.sql mysql-for-pinit:pinit.sql 
 
-Pin It App 2
-sudo docker run --name pinit-app-2 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql-pinit -p 50050-50100:8080 -d pinit:latest
+#login to mysql-for-pinit container bash
+sudo docker exec -it mysql-for-pinit /bin/bash
+
+#Run sql script in container password = 123456789
+mysql -u pinit --password pinit < pinit.sql 
+##################
+
+#Pin It App 1
+sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 50050-50100:8080 -d pinit:latest
+
+#Pin It App 2.
+sudo docker run --name pinit-app-2 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 50050-50100:8080 -d pinit:latest
 
 ```
 
@@ -129,6 +142,8 @@ le fichier `src/main/resources/import.sql` est exécuté lorsque la propriété 
 
 Ce fichier SQL génère notamment deux utilisateurs de base, un utilisateur lambda et un admin:
 Finalement le role d'administrateur est inutile pour le moment, mais dans le cas d'une éventuel évolution, cette fonctionnalités et préimplémentée.
+
+Pour la release 1.0.0, ce mode est désactiver, c'est à dire que la base de donnée devra être initialisé avec le script pinit.sql
 
 ```mysql
 INSERT INTO user VALUES (1, 'charp.antoine+pinit-user@gmail.com', 'user', '$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.'); #PWD = 123456
