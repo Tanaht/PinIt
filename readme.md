@@ -13,6 +13,12 @@ Notamment au niveau de la configuration Spring et Webpack,
 et la façon dont jhipster surcharge la configuration Spring du fichier application.yml par les variables d'environnements 
 Docker à aussi été réutilisée.
 
+
+Pour docker, nous avons crée une image mysql-pinit:latest en se basant sur l'image mysql de dockerhub.
+Cette image se trouve à l'url ci-dessous (396Mo), et peut être chargé grâce à: `sudo docker load -i mysql-pinit.tar`
+
+https://drive.google.com/file/d/1oWmSzkF7ONNVJB6wNFSqowbtWdvcvyEZ/view?usp=sharing
+
 #### Exigences techniques:
 
 L'application consiste en un serveur réalisée avec le framework Spring-Boot et un client web en Angular 4.
@@ -87,8 +93,8 @@ sudo mvn dockerfile:build -Denv=prod
 ```
 
 ```Shell
-sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -d mysql:latest
-sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 8080:8080 -d pinit:latest
+sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -d mysql-pinit:latest
+sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql-pinit -p 8080:8080 -d pinit:latest
 ```
 
 
@@ -98,13 +104,13 @@ And if we want to expand application but with the same underlying database:
 Because it will eraise the database at each new server start.
 
 ```Shell
-sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -p 50000-50050:3306 -d mysql:latest
+sudo docker run --name mysql-for-pinit --env-file=docker/mysql-env.list -p 50000-50050:3306 -d mysql-pinit:latest
 
 #Pin It App 1
-sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 50050-50100:8080 -d pinit:latest
+sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql-pinit -p 50050-50100:8080 -d pinit:latest
 
 Pin It App 2
-sudo docker run --name pinit-app-2 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 50050-50100:8080 -d pinit:latest
+sudo docker run --name pinit-app-2 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql-pinit -p 50050-50100:8080 -d pinit:latest
 
 ```
 
