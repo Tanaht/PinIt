@@ -13,26 +13,37 @@ Notamment au niveau de la configuration Spring et Webpack,
 et la façon dont jhipster surcharge la configuration Spring du fichier application.yml par les variables d'environnements 
 Docker à aussi été réutilisée.
 
+####Commandes utiles:
+- Pour supprimer les dossiers inutiles: sudo mvn clean
+- Pour générer le WAR de l'application: `mvn package -Denv=prod`
+- Pour générer l'image docker à partir du dockerfile de l'application et du WAR: `sudo mvn dockerfile:build -Denv=prod`
+- Pour tester la solution pour la scalabilité horizontale: voir la suite de ce readme (cf: Docker-isation)
+
 #### Exigences techniques:
 
 L'application consiste en un serveur réalisée avec le framework Spring-Boot et un client web en Angular 4.
 
 - Il ne doit pas être possible, pour un utilisateur, d’accéder à (ni modifier) une information concernant un autre utilisateur
   
-  De base les utilisateurs s'authentifient et recoivent un token, chaque token identifie un utilisateur, de ce fait lorsqu'une resource concernant un utilisateur est demandée, on vérifie que le token correspond à cet utilisateur, sauf en cas d'utilisateurs admin.
+  De base les utilisateurs s'authentifient et recoivent un token, chaque token identifie un utilisateur, 
+  de ce fait lorsqu'une resource concernant un utilisateur est demandée, on vérifie que le token correspond à cet utilisateur, sauf en cas d'utilisateurs admin.
+  Cette vérification se fait notemment sur les requêtes propres à chaques utilisateurs: Ajout/Modif/Delete de InscriptionActivity
 
 - L’état de l’application doit être persistant (si on éteint puis rallume l’application, elle doit retrouver son état avant extinction)
-  
-  La persistence est assuré, cependant pour assurer le bon fonctionnement lors du redémmarage du serveur, 
-  le serveur ne gère plus la création des tables dans la base de données, le script pinit.sql le remplace.
+
+  Spring ne gère pas la création de la base de données, il ne fait que l'utiliser. donc à chaque requête rest, les données sont persister en base.
   
 - Toutes les actions doivent pouvoir être réalisées depuis des points d’entrée HTTP (le corps des requêtes et des réponses doit être au format JSON)
   
-  On peut le visualiser grâce à Swagger.
+  On peut le visualiser grâce à Swagger. Les seules actions qui ne sont pas autoriser dans l'api par manque de temps est la manipulation des Activity (ajout, retrait...)
 
 - Le système doit informer différemment l’utilisateur des échecs selon que ceux-ci soient dus à une erreur de la part de l’utilisateur ou à un problème technique interne
 
-  Plusieurs Snackbar (notifications en bas à droite de l'interface) ont été implémentée sur l'interface qui annonce les problèmes de connexion ou les erreurs côté serveurs.
+  Plusieurs (notifications en bas à droite de l'interface en rouge) ont été implémentée sur l'interface qui annonce les problèmes de connexion ou les erreurs côté serveurs dont:
+    
+    - La notification lorsque le token n'est plus valide après une connexion, 
+    - une erreur de mot de passe, 
+    - un problème de connexion avec le serveur. 
   
   
 - Le serveur HTTP est scalable horizontalement (le fait de démarrer plusieurs instances en parallèle ne pose pas de problème)
@@ -70,6 +81,8 @@ ISTIC (parking) COORDINATE: 48.115464, -1.638707
 
 ###Docker-isation:
 
+*l'image mysql fait référence à l'image mysql:latest disponible sur le dockerhub*
+
 // TODO: Use Docker Compose with yaml configuration file if time is not over.
 
 `docker/mysql-env.list` Configuration to run Mysql Image:
@@ -82,6 +95,9 @@ Mysql root password: 123456789
 `docker/pinit-env.list` Configuration to override Spring environment variable to connect to mysql datasource
 
 /!\ Before these commands, if no docker image exists run the following command:
+
+The plugin we use to generate the docker image seems a little buggy and may crash due to incorrect plugin installation for the first use.
+Alse this plugin take its time but works even if console seems froozen.
 ```Shell
 sudo mvn dockerfile:build -Denv=prod
 ```
@@ -96,7 +112,8 @@ sudo docker cp pinit.sql mysql-for-pinit:pinit.sql
 sudo docker exec -it mysql-for-pinit /bin/bash
 
 #Run sql script in container password = 123456789
-mysql -u pinit --password pinit < pinit.sql 
+#/!\ the first mysql container login always fail for no reason, so be sure to can logged in before this command
+mysql --user=pinit --password pinit < pinit.sql 
 ##################
 
 sudo docker run --name pinit-app-1 --env-file=docker/pinit-env.list --link mysql-for-pinit:mysql -p 8080:8080 -d pinit:latest
@@ -116,7 +133,9 @@ sudo docker cp pinit.sql mysql-for-pinit:pinit.sql
 sudo docker exec -it mysql-for-pinit /bin/bash
 
 #Run sql script in container password = 123456789
-mysql -u pinit --password pinit < pinit.sql 
+
+#/!\ the first mysql container login always fail for no reason, so be sure to can logged in before this command
+mysql --user=pinit --password pinit < pinit.sql 
 ##################
 
 #Pin It App 1
