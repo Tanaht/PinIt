@@ -8,6 +8,8 @@ import fr.istic.m2.taa.pinit.domain.User;
 import fr.istic.m2.taa.pinit.repository.UserRepository;
 import fr.istic.m2.taa.pinit.service.AuthenticateService;
 import fr.istic.m2.taa.pinit.web.rest.model.Login;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
+@Api(value="AuthenticateRessource", description="Operation about autentification of user")
 public class AuthenticateRessource{
     private final Logger log = LoggerFactory.getLogger(AuthenticateRessource.class);
 
@@ -39,6 +42,7 @@ public class AuthenticateRessource{
         this.tokenProvider = tokenProvider;
     }
 
+    @ApiOperation(value = "Authenticate a user and return info user with token in header")
     @PostMapping("/authenticate/login")
     public User connectUser(@Valid @RequestBody Login login, HttpServletResponse response){
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -58,6 +62,7 @@ public class AuthenticateRessource{
         return userRepository.findOneByLogin(login.getLogin()).get();
     }
 
+    @ApiOperation(value = "pas utilisé, à supprimer")
     @RequestMapping(value="/authenticate/logout", method = RequestMethod.GET)
     @Secured(Authority.USER)
     public boolean disconnectUser(){

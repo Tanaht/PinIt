@@ -13,6 +13,8 @@ import fr.istic.m2.taa.pinit.web.rest.exception.BadInscriptionActivityId;
 import fr.istic.m2.taa.pinit.web.rest.exception.BadUserId;
 import fr.istic.m2.taa.pinit.web.rest.exception.NotAuthorized;
 import fr.istic.m2.taa.pinit.web.rest.model.InscriptionActivityRegister;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@Api(value="InscriptionActivityResource", description="Operation about user inscription in activities")
 public class InscriptionActivityResource {
     private final Logger log = LoggerFactory.getLogger(InscriptionActivityResource.class);
 
@@ -51,6 +54,7 @@ public class InscriptionActivityResource {
         this.securityUtilsService = securityUtilsService;
     }
 
+    @ApiOperation(value = "Return the list of all activities where the user is regiter")
     @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.GET)
     @Secured(Authority.USER)
     public List<InscriptionActivity> getInscriptionActivitiesByID(@PathVariable("userId") long userId) throws BadUserId, NotAuthorized {
@@ -67,6 +71,7 @@ public class InscriptionActivityResource {
         return inscriptionActivityRepository.findAllByUser_Id(userId);
     }
 
+    @ApiOperation(value = "Add an activity to an user")
     @RequestMapping(value="/users/{userId}/inscriptions", method = RequestMethod.POST)
     @Secured(Authority.USER)
     public InscriptionActivity addInscriptionToUser(@PathVariable("userId") long userId, @Valid @RequestBody InscriptionActivityRegister ins) throws BadUserId, BadActivityId, NotAuthorized {
@@ -101,6 +106,7 @@ public class InscriptionActivityResource {
         return inscriptionActivity;
     }
 
+    @ApiOperation(value = "Remove an activity from an user")
     @RequestMapping(value="/inscriptions/{inscriptionId}", method = RequestMethod.DELETE)
     @Secured(Authority.USER)
     public Map<String, String> removeInscriptionById(@PathVariable("inscriptionId") long inscriptionId) throws BadActivityId, BadInscriptionActivityId, NotAuthorized {
@@ -132,6 +138,7 @@ public class InscriptionActivityResource {
         return response;
     }
 
+    @ApiOperation(value = "edit a user activity register")
     @RequestMapping(value="/inscriptions/{inscriptionId}", method = RequestMethod.PUT)
     @Secured(Authority.USER)
     public Map<String, String> editInscriptionActivity(@PathVariable("inscriptionId") long inscriptionId,@RequestBody InscriptionActivityRegister ins) throws BadActivityId, BadUserId, BadInscriptionActivityId {
