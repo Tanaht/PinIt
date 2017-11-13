@@ -11,6 +11,8 @@ import fr.istic.m2.taa.pinit.web.rest.exception.BadUserId;
 import fr.istic.m2.taa.pinit.web.rest.exception.UserLoginAlreadyExist;
 import fr.istic.m2.taa.pinit.web.rest.model.Login;
 import fr.istic.m2.taa.pinit.web.rest.model.UserRegister;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api")
+@Api(value="UserResource", description="Operation to get information about an user")
 public class UserResource {
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
@@ -46,6 +49,7 @@ public class UserResource {
         this.tokenProvider = tokenProvider;
     }
 
+    @ApiOperation(value = "create an user and return his info and put a token to header")
     @PostMapping("/users")
     public User createUser(@Valid @RequestBody UserRegister newUser, HttpServletResponse response) throws UserLoginAlreadyExist {
         log.debug("REST request to save User : {}", newUser);
